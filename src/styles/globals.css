@@ -1,0 +1,128 @@
+@import "tailwindcss";
+@import "./tokens.css";
+
+/*
+ * Map semantic tokens to Tailwind utilities.
+ * `inline` makes utilities reference the token directly, so changing a value
+ * in tokens.css updates every utility that uses it.
+ */
+@theme inline {
+  /* Colors: bg-background, bg-surface, text-foreground, text-muted, bg-accent ... */
+  --color-*: initial;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+  --color-background: var(--bg);
+  --color-surface: var(--surface);
+  --color-foreground: var(--fg);
+  --color-muted: var(--fg-muted);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-on-accent: var(--accent-fg);
+  --color-accent-subtle: var(--accent-subtle);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-ring: var(--ring);
+  --color-danger: var(--danger);
+  --color-success: var(--success);
+
+  /* Fonts: font-heading, font-sans (default body), font-mono */
+  --font-heading: var(--type-heading);
+  --font-sans: var(--type-body);
+  --font-mono: var(--type-code);
+
+  /* Fluid type scale for headings: text-display, text-h1, text-h2, text-h3 */
+  --text-display: clamp(2.75rem, 1.5rem + 5vw, 5rem);
+  --text-display--line-height: 1.05;
+  --text-display--letter-spacing: -0.02em;
+  --text-h1: clamp(2.25rem, 1.5rem + 3vw, 3.5rem);
+  --text-h1--line-height: 1.1;
+  --text-h1--letter-spacing: -0.015em;
+  --text-h2: clamp(1.75rem, 1.35rem + 1.6vw, 2.5rem);
+  --text-h2--line-height: 1.2;
+  --text-h2--letter-spacing: -0.01em;
+  --text-h3: clamp(1.25rem, 1.1rem + 0.6vw, 1.625rem);
+  --text-h3--line-height: 1.3;
+  --text-lead: clamp(1.125rem, 1.05rem + 0.3vw, 1.3125rem);
+  --text-lead--line-height: 1.6;
+
+  /* Radii: rounded-control, rounded-card, rounded-pill */
+  --radius-control: var(--shape-control);
+  --radius-card: var(--shape-card);
+  --radius-pill: var(--shape-pill);
+
+  /* Shadows: shadow-soft, shadow-raised, shadow-lifted */
+  --shadow-soft: var(--elevation-1);
+  --shadow-raised: var(--elevation-2);
+  --shadow-lifted: var(--elevation-3);
+
+  /* Layout: max-w-content, max-w-prose */
+  --container-content: var(--layout-max);
+  --container-prose: var(--layout-prose);
+
+  /* Spacing: py-section, px-gutter */
+  --spacing-section: var(--section-gap);
+  --spacing-gutter: var(--gutter);
+
+  /* Easing: ease-standard, ease-emphasized */
+  --ease-standard: var(--curve-standard);
+  --ease-emphasized: var(--curve-emphasized);
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+    scroll-behavior: smooth;
+    scroll-padding-top: var(--nav-height);
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--fg);
+    font-family: var(--type-body);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--type-heading);
+    font-weight: 600;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  a {
+    color: var(--accent);
+    text-underline-offset: 0.2em;
+    transition: color var(--transition-fast);
+  }
+
+  a:hover {
+    color: var(--accent-hover);
+  }
+
+  :focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
+  }
+
+  ::selection {
+    background-color: var(--accent-subtle);
+    color: var(--fg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}

@@ -1,0 +1,162 @@
+/*
+ * Design tokens: single source of truth.
+ *
+ * Three layers, each referencing only the layer above it:
+ *   1. Primitive  raw values, named by what they are (never used in components)
+ *   2. Semantic   purpose aliases, named by what they do
+ *   3. Component  per-component knobs, built from semantic tokens
+ *
+ * Tailwind utilities are mapped from the semantic layer in theme.css.
+ */
+
+/* ===================== 1. PRIMITIVE ===================== */
+:root {
+  /* Neutrals (brand palette) */
+  --stone-100: #e4e3e3;
+  --stone-200: #d1d0d0;
+  --taupe-400: #988686;
+  --taupe-600: #6f6262; /* derived: border-strong, 3.79:1 on stone-200 */
+  --taupe-800: #4f4545;
+  --black: #000000;
+  --white: #ffffff;
+
+  /* Accent (brand palette) */
+  --violet-100: #ddd8eb; /* derived: subtle accent fill, violet-600 text on it is 5.36:1 */
+  --violet-600: #5b4b8a;
+  --violet-700: #4a3b78;
+
+  /* Status (derived, AA on stone-100 and stone-200) */
+  --red-700: #9b2c2c;
+  --green-800: #275a35;
+
+  /* Shadow tint: taupe-800 as RGB channels */
+  --shadow-tint: 79 69 69;
+
+  /* Font stacks; --font-playfair / --font-inter are injected by next/font */
+  --family-serif: var(--font-playfair), "Playfair Display", Georgia, "Times New Roman", serif;
+  --family-sans: var(--font-inter), "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --family-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+
+  /* Radii: soft, rounded */
+  --radius-2: 0.375rem;
+  --radius-3: 0.625rem;
+  --radius-4: 1rem;
+  --radius-5: 1.5rem;
+  --radius-round: 9999px;
+
+  /* Motion */
+  --duration-1: 150ms;
+  --duration-2: 250ms;
+  --duration-3: 400ms;
+  --curve-standard: cubic-bezier(0.2, 0, 0, 1);
+  --curve-emphasized: cubic-bezier(0.3, 0, 0, 1.2);
+}
+
+/* ===================== 2. SEMANTIC ===================== */
+:root {
+  /* Surfaces */
+  --bg: var(--stone-200);            /* page background */
+  --surface: var(--stone-100);       /* cards, nav, raised areas */
+
+  /* Text */
+  --fg: var(--black);                /* primary text, 13.6:1 on bg */
+  --fg-muted: var(--taupe-800);      /* secondary text, 6.0:1 on bg */
+
+  /* Accent */
+  --accent: var(--violet-600);       /* links, primary actions, 4.84:1 on bg */
+  --accent-hover: var(--violet-700);
+  --accent-fg: var(--white);         /* text on accent, 7.45:1 */
+  --accent-subtle: var(--violet-100);/* tag chips, selection, highlights */
+
+  /* Lines */
+  --border: var(--taupe-400);        /* decorative dividers only (2.24:1) */
+  --border-strong: var(--taupe-600); /* input outlines and controls (meets 3:1) */
+  --ring: var(--accent);             /* focus indicator */
+
+  /* Status */
+  --danger: var(--red-700);
+  --success: var(--green-800);
+
+  /* Typography */
+  --type-heading: var(--family-serif);
+  --type-body: var(--family-sans);
+  --type-code: var(--family-mono);
+
+  /* Elevation (soft, warm-tinted) */
+  --elevation-1: 0 1px 2px rgb(var(--shadow-tint) / 0.08), 0 1px 3px rgb(var(--shadow-tint) / 0.06);
+  --elevation-2: 0 4px 12px -2px rgb(var(--shadow-tint) / 0.12), 0 2px 4px -2px rgb(var(--shadow-tint) / 0.08);
+  --elevation-3: 0 16px 32px -8px rgb(var(--shadow-tint) / 0.18), 0 4px 8px -4px rgb(var(--shadow-tint) / 0.08);
+
+  /* Layout */
+  --layout-max: 72rem;
+  --layout-prose: 42rem;
+  --gutter: clamp(1rem, 4vw, 2rem);
+  --section-gap: clamp(4rem, 10vw, 8rem);
+
+  /* Shape */
+  --shape-control: var(--radius-3);
+  --shape-card: var(--radius-4);
+  --shape-pill: var(--radius-round);
+
+  /* Motion */
+  --transition-fast: var(--duration-1) var(--curve-standard);
+  --transition-base: var(--duration-2) var(--curve-standard);
+  --transition-slow: var(--duration-3) var(--curve-emphasized);
+}
+
+/* ===================== 3. COMPONENT ===================== */
+:root {
+  /* Button: primary */
+  --button-bg: var(--accent);
+  --button-bg-hover: var(--accent-hover);
+  --button-fg: var(--accent-fg);
+  --button-radius: var(--shape-pill);
+  --button-px: 1.5rem;
+  --button-py: 0.75rem;
+  --button-shadow: var(--elevation-1);
+  --button-shadow-hover: var(--elevation-2);
+
+  /* Button: secondary (outline) */
+  --button-secondary-bg: transparent;
+  --button-secondary-bg-hover: var(--surface);
+  --button-secondary-fg: var(--fg);
+  --button-secondary-border: var(--border-strong);
+
+  /* Card (projects, experience) */
+  --card-bg: var(--surface);
+  --card-border: var(--border);
+  --card-radius: var(--shape-card);
+  --card-padding: clamp(1.25rem, 3vw, 2rem);
+  --card-shadow: var(--elevation-1);
+  --card-shadow-hover: var(--elevation-3);
+
+  /* Tag (tech stack chips) */
+  --tag-bg: var(--accent-subtle);
+  --tag-fg: var(--accent);
+  --tag-radius: var(--shape-pill);
+  --tag-px: 0.75rem;
+  --tag-py: 0.25rem;
+
+  /* Input (contact form) */
+  --input-bg: var(--surface);
+  --input-fg: var(--fg);
+  --input-placeholder: var(--fg-muted);
+  --input-border: var(--border-strong);
+  --input-border-focus: var(--accent);
+  --input-border-error: var(--danger);
+  --input-radius: var(--shape-control);
+  --input-px: 1rem;
+  --input-py: 0.75rem;
+
+  /* Nav */
+  --nav-bg: color-mix(in srgb, var(--surface) 80%, transparent); /* frosted header */
+  --nav-link-fg: var(--fg-muted);
+  --nav-link-fg-hover: var(--fg);
+  --nav-link-fg-active: var(--accent);
+  --nav-height: 4rem;
+
+  /* Focus ring */
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 3px;
+  --focus-ring-color: var(--ring);
+}
