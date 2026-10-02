@@ -126,3 +126,174 @@
     }
   }
 }
+
+@layer components {
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: var(--button-py) var(--button-px);
+    border-radius: var(--button-radius);
+    font-weight: 500;
+    line-height: 1.25;
+    text-decoration: none;
+    transition:
+      background-color var(--transition-fast),
+      box-shadow var(--transition-fast),
+      translate var(--transition-fast);
+  }
+
+  .btn:hover {
+    translate: 0 -1px;
+  }
+
+  .btn:active {
+    translate: 0 0;
+  }
+
+  .btn-primary {
+    background-color: var(--button-bg);
+    color: var(--button-fg);
+    box-shadow: var(--button-shadow);
+  }
+
+  .btn-primary:hover {
+    background-color: var(--button-bg-hover);
+    color: var(--button-fg);
+    box-shadow: var(--button-shadow-hover);
+  }
+
+  .btn-primary:active {
+    box-shadow: none;
+  }
+
+  .btn-secondary {
+    background-color: var(--button-secondary-bg);
+    color: var(--button-secondary-fg);
+    box-shadow: inset 0 0 0 1px var(--button-secondary-border);
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--button-secondary-bg-hover);
+    color: var(--button-secondary-fg);
+  }
+
+  /* Hero: one accent variable drives the tint, shapes and active company */
+  .hero {
+    --accent-color: var(--hero-accent-default);
+    background-color: color-mix(in srgb, var(--accent-color) var(--hero-tint), var(--bg));
+    transition: background-color var(--theme-duration) var(--theme-ease);
+  }
+
+  /*
+   * Backdrop layers. Every color derives from --accent-color and transitions
+   * with the same duration/easing as the hero background.
+   */
+
+  /* Far: soft blob. A solid fill shaped by a radial mask, so the color can
+     transition (gradients can't) and no blur filter is needed */
+  .hero-blob {
+    background-color: color-mix(in srgb, var(--accent-color) var(--hero-blob-mix), transparent);
+    mask-image: radial-gradient(closest-side, black, transparent);
+    transition: background-color var(--theme-duration) var(--theme-ease);
+  }
+
+  /* Far: static grain. Equal light and dark specks with normal blending: neutral
+     on average (text contrast holds) and no per-frame blend cost like overlay */
+  .hero-grain {
+    background-image: url("/textures/grain.png");
+    opacity: var(--hero-grain-opacity);
+  }
+
+  /* Mid: thin line shapes (SVG strokes and rings use currentColor) */
+  .hero-line {
+    color: color-mix(in srgb, var(--accent-color) var(--hero-ring-mix), transparent);
+    transition: color var(--theme-duration) var(--theme-ease);
+  }
+
+  .hero-ring {
+    border: 1.5px solid currentColor;
+    border-radius: var(--radius-round);
+  }
+
+  /* Mid: concentric rings behind the name, pulsed from JS on company change */
+  .hero-ripple {
+    border: 1px solid color-mix(in srgb, var(--accent-color) var(--hero-ripple-mix), transparent);
+    border-radius: var(--radius-round);
+    transition: border-color var(--theme-duration) var(--theme-ease);
+  }
+
+  /* Near: dust speck */
+  .hero-speck {
+    background-color: color-mix(in srgb, var(--accent-color) var(--hero-speck-mix), transparent);
+    border-radius: var(--radius-round);
+    filter: blur(0.5px);
+    transition: background-color var(--theme-duration) var(--theme-ease);
+  }
+
+  /* Rendered but invisible: the dot grid canvas reads its transitioning color */
+  .hero-color-probe {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    color: var(--accent-color);
+    transition: color var(--theme-duration) var(--theme-ease);
+  }
+
+  /* Idle motion, on an inner element so it never fights the parallax transform */
+  .hero-float {
+    animation: hero-float var(--float-duration, 9s) ease-in-out var(--float-delay, 0s) infinite alternate;
+  }
+
+  .hero-drift {
+    animation: hero-drift var(--float-duration, 14s) ease-in-out var(--float-delay, 0s) infinite alternate;
+  }
+
+  .hero-object-fill {
+    fill: var(--accent-color);
+    transition: fill var(--theme-duration) var(--theme-ease);
+  }
+
+  .hero-company-name {
+    transition: color var(--theme-duration) var(--theme-ease);
+  }
+
+  [data-active="true"] .hero-company-name {
+    color: var(--accent-color);
+  }
+}
+
+@keyframes hero-float {
+  from {
+    translate: 0 0;
+    rotate: 0deg;
+  }
+  to {
+    translate: 0 -10px;
+    rotate: 4deg;
+  }
+}
+
+@keyframes hero-drift {
+  from {
+    translate: 0 0;
+  }
+  50% {
+    translate: 14px -18px;
+  }
+  to {
+    translate: -10px -30px;
+  }
+}
+
+@layer components {
+  /* Logo tinted with the current text color; set --logo-src and aspect-ratio inline */
+  .logo-wordmark {
+    display: block;
+    height: 0.8em;
+    background-color: currentColor;
+    mask: var(--logo-src) left center / contain no-repeat;
+  }
+}

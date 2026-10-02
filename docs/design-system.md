@@ -123,6 +123,38 @@ Radius `rounded-card`, padding `--card-padding`. The title is `text-h3`, the des
 
 Sticky header `--nav-height` (64px), background `--nav-bg` with `backdrop-blur`. Links use `--nav-link-fg`, darken to `--nav-link-fg-hover` on hover, and use `--nav-link-fg-active` with `aria-current="page"` for the active section.
 
+### Hero (company theming)
+
+`useCompanyTheme` is the only code that writes `--accent-color` on the hero. Everything in the hero derives its color from it: the background tint, the backdrop layers, the hover object and the active company name. All of them share `--theme-duration` / `--theme-ease`, so they change together.
+
+| Token | Value | Why |
+|-------|-------|-----|
+| `--company-*` | `--blue-800`, `--teal-800`, `--wine-800`, `--rust-800` | Darkened so names stay at 4.1:1 or above as large text |
+| `--company-inmind` | `--blue-500` (#2953F6) | inmind.ai brand blue. Its logo is shown instead of text and logos are exempt from WCAG contrast, so it sits at 3.45:1 on the tinted hero |
+| `--hero-tint` | 3% | Base accent tint. Kept low because muted text has little headroom; the blobs carry the color instead |
+| `--hero-shape-opacity` | 0.12 | Caps the hover object |
+
+### Hero backdrop (parallax layers)
+
+Three layers with consistent depth cues: farther layers move less, look softer and are fainter.
+
+| Layer | Contents | Scroll / cursor movement | Tokens |
+|-------|----------|--------------------------|--------|
+| Far | 2 soft blobs (radial mask, no blur filter), static grain | Lags the content by 260px; shifts 6px with the cursor | `--hero-blob-mix` 14%, `--hero-grain-opacity` 0.3 |
+| Far/mid | Dot grid on one canvas; dots near the cursor push away and grow | 150px / 10px | `--hero-dot-alpha` 0.2, `--hero-dot-alpha-max` 0.55 |
+| Mid | 8 thin shapes: rings, crosses, `{ }`, `</>`, ✓ (tilt toward the cursor, idle float) | 80px / 18px, ±6° tilt | `--hero-ring-mix` 28% |
+| Mid | 3 concentric rings behind the name that ripple on company change (desktop only) | Move with the name | `--hero-ripple-mix` 20% |
+| Near | 6 dust specks drifting in front of the content | Outruns the content by 180px; shifts 34px with the cursor | `--hero-speck-mix` 30% |
+
+Rules this follows:
+
+- **Text contrast.** It is checked on rendered pixels, not only on paper. Muted text stays at 4.5:1 or above (5th percentile of the pixels behind it) in every hover state, including with the hover object dragged next to the text. Fills stay away from text, and only thin lines may cross it.
+- **Reduced motion.** Nothing moves, but the composition and theme colors stay.
+- **Touch devices.** Scroll parallax and idle float only. There is no cursor effect and no hover object.
+- **Weak devices.** `useFrameBudget` watches frame times. If the median drops below about 40fps, it turns off idle float, cursor parallax and dot repel for that visit. Scroll parallax, themes and the hover object stay.
+
+To add a company: add a primitive, add a `--company-<id>` alias, then add an entry to `src/content/companies.ts`. Then re-run the pixel contrast check in every hover state.
+
 ## Example
 
 ```tsx

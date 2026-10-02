@@ -29,6 +29,17 @@
   --red-700: #9b2c2c;
   --green-800: #275a35;
 
+  /*
+   * Company accents (hero theming). Darkened so each stays readable on the
+   * tinted hero: >= 4.1:1 as large text with the shape behind it, and muted
+   * text stays >= 4.6:1 over the shape. Re-run the check if you change these.
+   */
+  --blue-800: #16478f;
+  --teal-800: #0b5555;
+  --wine-800: #7e2533;
+  --blue-500: #2953f6; /* inmind.ai brand blue: logo only (logos are exempt from WCAG contrast), 3.45:1 on the tinted hero */
+  --rust-800: #7f3d14;
+
   /* Shadow tint: taupe-800 as RGB channels */
   --shadow-tint: 79 69 69;
 
@@ -76,6 +87,13 @@
   /* Status */
   --danger: var(--red-700);
   --success: var(--green-800);
+
+  /* Company themes (hero) */
+  --company-bmw: var(--blue-800);
+  --company-cybermeshwork: var(--teal-800);
+  --company-ids: var(--wine-800);
+  --company-inmind: var(--blue-500);
+  --company-geek-express: var(--rust-800);
 
   /* Typography */
   --type-heading: var(--family-serif);
@@ -154,6 +172,31 @@
   --nav-link-fg-hover: var(--fg);
   --nav-link-fg-active: var(--accent);
   --nav-height: 4rem;
+
+  /* Hero. --accent-color is written at runtime by useCompanyTheme only. */
+  --hero-accent-default: var(--accent);
+  /*
+   * Backdrop budget: muted text has little headroom, so the base tint is low
+   * and color lives in the blobs, which sit away from text. Verified by
+   * sampling rendered pixels behind every muted text element.
+   */
+  --hero-tint: 3%;              /* accent mixed into the hero background */
+  --hero-shape-opacity: 0.12;   /* hover object ceiling */
+
+  /* Far layer: soft, slow, low contrast */
+  --hero-blob-mix: 14%;         /* blob center; fades to 0 at its edge */
+  --hero-grain-opacity: 0.3;    /* static tile, light and dark specks average out */
+
+  /* Mid layer: crisp thin lines and dots */
+  --hero-ring-mix: 28%;         /* rings, crosses, dev symbols */
+  --hero-ripple-mix: 20%;       /* concentric rings behind the name */
+  --hero-dot-alpha: 0.2;        /* dot grid at rest */
+  --hero-dot-alpha-max: 0.55;   /* dots right next to the cursor */
+
+  /* Near layer: sparse, faint, moves most */
+  --hero-speck-mix: 30%;
+  --theme-duration: var(--duration-3);
+  --theme-ease: var(--curve-standard);
 
   /* Focus ring */
   --focus-ring-width: 2px;
