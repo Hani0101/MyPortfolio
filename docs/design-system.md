@@ -123,9 +123,21 @@ Radius `rounded-card`, padding `--card-padding`. The title is `text-h3`, the des
 
 Sticky header `--nav-height` (64px), background `--nav-bg` with `backdrop-blur`. Links use `--nav-link-fg`, darken to `--nav-link-fg-hover` on hover, and use `--nav-link-fg-active` with `aria-current="page"` for the active section.
 
+### Footer (contact)
+
+The footer is also the contact section: it carries the `#contact` anchor that the hero's "Get in touch" button links to. Copy and links live in `src/content/footer.ts`.
+
+| Piece | Spec |
+|-------|------|
+| Container | `--footer-bg` (surface) with a 1px `--footer-border` hairline on top. Content in `max-w-content px-gutter`, `py-section` |
+| Contact block | Eyebrow label, `text-h2` title, `text-lead text-muted` line, then a primary button (`mailto:`) and the address as a plain link |
+| Link columns | `nav` landmarks, each labelled by its uppercase heading. Links use `--footer-link-fg`, darken to `--footer-link-fg-hover` with an underline on hover, and have 8px vertical padding so each target is at least 24px tall |
+| External links | `http(s)` links open in a new tab, with a `↗` and a screen-reader note saying so |
+| Bottom bar | Divider, `© year owner` and a "Back to top" link, `text-sm text-muted` |
+
 ### Hero (company theming)
 
-`useCompanyTheme` (`src/lib`) is the only code that writes `--accent-color`, on the hero (hover) and on the experience section (scroll). Everything in the hero derives its color from it: the background tint, the backdrop layers, the hover object and the active company name. All of them share `--theme-duration` / `--theme-ease`, so they change together.
+`useCompanyTheme` (`src/lib`) is the only code that writes `--accent-color`, on the hero (hover), the experience section (scroll) and the projects showcase (selection, with `--project-*` colors). Everything in the hero derives its color from it: the background tint, the backdrop layers, the hover object and the active company name. All of them share `--theme-duration` / `--theme-ease`, so they change together.
 
 | Token | Value | Why |
 |-------|-------|-----|

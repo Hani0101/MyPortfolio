@@ -95,6 +95,11 @@
   --company-inmind: var(--blue-500);
   --company-geek-express: var(--rust-800);
 
+  /* Project themes (projects showcase). TODO: placeholders, pick one per project */
+  --project-one: var(--violet-600);
+  --project-two: var(--green-800);
+  --project-three: var(--blue-800);
+
   /* Typography */
   --type-heading: var(--family-serif);
   --type-body: var(--family-sans);
@@ -173,6 +178,12 @@
   --nav-link-fg-active: var(--accent);
   --nav-height: 4rem;
 
+  /* Footer (also the contact section) */
+  --footer-bg: var(--surface);
+  --footer-border: var(--border);
+  --footer-link-fg: var(--fg-muted);     /* 7.3:1 on surface */
+  --footer-link-fg-hover: var(--fg);
+
   /* Hero. --accent-color is written at runtime by useCompanyTheme only. */
   --hero-accent-default: var(--accent);
   /*
@@ -211,6 +222,16 @@
   --story-chip-mix: 8%;               /* chip fill; text stays --fg */
   --story-chip-border-mix: 55%;
   --story-chip-stagger: 90ms;
+
+  /*
+   * Projects showcase: the selected project themes the section, like a company
+   * does the hero. Same rule: accents only for the stage, the marker and chip
+   * outlines, never for small text.
+   */
+  --showcase-tint: var(--hero-tint);  /* section background, same strength as the hero and stories */
+  --showcase-stage-mix: 14%;          /* the stage behind the browser window */
+  --showcase-sketch-mix: 30%;         /* placeholder page sketch, so the theme shows before the media exists */
+  --showcase-tab-hover-mix: 6%;       /* tab row on hover (pointer devices only) */
 
   /* 3D stage (read by Three.js through hidden color probes). Cargo turns --accent-color when highlighted. */
   --story-model-body: var(--stone-100);  /* truck, browser card */
