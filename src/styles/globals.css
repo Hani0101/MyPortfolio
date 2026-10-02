@@ -179,6 +179,14 @@
     color: var(--button-secondary-fg);
   }
 
+  /* Card (projects): not linked as a whole, so no hover lift; its links carry the action */
+  .card {
+    padding: var(--card-padding);
+    border-radius: var(--card-radius);
+    background-color: var(--card-bg);
+    box-shadow: inset 0 0 0 1px var(--card-border), var(--card-shadow);
+  }
+
   /* Hero: one accent variable drives the tint, shapes and active company */
   .hero {
     --accent-color: var(--hero-accent-default);
@@ -289,6 +297,186 @@
 }
 
 @layer components {
+  /*
+   * Experience stories: like the hero, one accent variable drives the theme.
+   * The section owns it, so moving between stories crossfades instead of
+   * cutting at the boundary.
+   */
+  .experience {
+    --accent-color: var(--story-accent-default);
+    --story-bg: color-mix(in srgb, var(--accent-color) var(--story-tint), var(--bg));
+    background-color: var(--story-bg);
+    transition: background-color var(--theme-duration) var(--theme-ease);
+  }
+
+  /* Progress line: a static track, and a fill scaled from scroll in JS */
+  .story-track {
+    background-color: var(--border);
+  }
+
+  .story-fill {
+    background-color: var(--accent-color);
+    transition: background-color var(--theme-duration) var(--theme-ease);
+  }
+
+  /* One dot per step; the background hides the track behind upcoming dots */
+  .story-dot {
+    background-color: var(--story-bg);
+    border: 2px solid var(--border-strong);
+    transition:
+      background-color var(--theme-duration) var(--theme-ease),
+      border-color var(--theme-duration) var(--theme-ease),
+      box-shadow var(--theme-duration) var(--theme-ease);
+  }
+
+  .story-step:is([data-state="active"], [data-state="passed"]) .story-dot {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+  }
+
+  .story-step[data-state="active"] .story-dot {
+    box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent-color) var(--story-halo-mix), transparent);
+  }
+
+  /* Stage: words are sized from the stage width so the longest one fits */
+  .story-stage {
+    container-type: inline-size;
+    --word-mix: var(--story-word-mix);
+  }
+
+  @media (min-width: 64rem) {
+    .story-stage {
+      --word-mix: var(--story-word-mix-wide);
+    }
+  }
+
+  .story-word {
+    font-size: 18cqi;
+    letter-spacing: -0.03em;
+    color: color-mix(in srgb, var(--accent-color) var(--word-mix), transparent);
+    opacity: 0;
+    translate: 0 0.15em;
+    transition:
+      opacity var(--theme-duration) var(--theme-ease),
+      translate var(--theme-duration) var(--theme-ease),
+      color var(--theme-duration) var(--theme-ease);
+  }
+
+  .story-word[data-active="true"] {
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  .story-blob {
+    background-color: color-mix(in srgb, var(--accent-color) var(--hero-blob-mix), transparent);
+    mask-image: radial-gradient(closest-side, black, transparent);
+    transition: background-color var(--theme-duration) var(--theme-ease);
+  }
+
+  /* The shared stage: the next story's layer crossfades in over the last one's */
+  .story-layer {
+    transition: opacity var(--theme-duration) var(--theme-ease);
+  }
+
+  .story-layer[data-active="false"] {
+    opacity: 0;
+  }
+
+  /* Stage visuals crossfade when a step picks another one (or none) */
+  .story-visual {
+    transition: opacity var(--theme-duration) var(--theme-ease);
+  }
+
+  .story-visual[data-active="false"] {
+    opacity: 0;
+  }
+
+  /* Phones: the stage word shares the visual's cell and steps aside while a visual shows */
+  .story-words {
+    transition: opacity var(--theme-duration) var(--theme-ease);
+  }
+
+  @media (max-width: 63.98rem) {
+    .story-words[data-yield="true"] {
+      opacity: 0;
+    }
+  }
+
+  /*
+   * Phones: steps scroll over the pinned visual, so each step's text sits on
+   * the section background. Invisible on plain background, it only hides
+   * the visual where text passes over it.
+   */
+  @media (max-width: 63.98rem) {
+    .story-step-body {
+      margin: -0.75rem;
+      padding: 0.75rem;
+      border-radius: var(--radius-3);
+      background-color: color-mix(in srgb, var(--story-bg) 90%, transparent);
+      backdrop-filter: blur(6px);
+    }
+  }
+
+  /* 3D stage: fades in once the model has loaded */
+  .story-model canvas {
+    opacity: 0;
+    transition: opacity var(--transition-slow);
+  }
+
+  .story-model canvas[data-ready="true"] {
+    opacity: 1;
+  }
+
+  /* Hidden, but their colors transition with the theme so the 3D scene can follow */
+  .story-model-probes {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+  }
+
+  .story-model-probes > span {
+    transition: color var(--theme-duration) var(--theme-ease);
+  }
+
+  /* Result numbers: an accent rule on top, the number itself stays --fg */
+  .story-stat {
+    border-top: 2px solid var(--accent-color);
+    transition: border-color var(--theme-duration) var(--theme-ease);
+  }
+
+  /* Earlier roles: each row is tinted by its own company color, whatever the section theme */
+  .role-dot {
+    background-color: var(--role-accent);
+  }
+
+  .role-chip {
+    color: var(--fg);
+    background-color: color-mix(in srgb, var(--role-accent) var(--story-chip-mix), var(--surface));
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--role-accent) var(--story-chip-border-mix), transparent);
+  }
+
+  /* Stack chips: accent outline and fill, text stays --fg for contrast */
+  .story-chip {
+    color: var(--fg);
+    background-color: color-mix(in srgb, var(--accent-color) var(--story-chip-mix), var(--surface));
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent-color) var(--story-chip-border-mix), transparent);
+    transition:
+      opacity var(--transition-slow),
+      translate var(--transition-slow),
+      scale var(--transition-slow),
+      background-color var(--theme-duration) var(--theme-ease),
+      box-shadow var(--theme-duration) var(--theme-ease);
+    transition-delay: calc(var(--i, 0) * var(--story-chip-stagger));
+  }
+
+  .story-chips[data-revealed="false"] .story-chip {
+    opacity: 0;
+    translate: 0 0.5rem;
+    scale: 0.9;
+    transition-delay: 0s;
+  }
+
   /* Logo tinted with the current text color; set --logo-src and aspect-ratio inline */
   .logo-wordmark {
     display: block;

@@ -125,7 +125,7 @@ Sticky header `--nav-height` (64px), background `--nav-bg` with `backdrop-blur`.
 
 ### Hero (company theming)
 
-`useCompanyTheme` is the only code that writes `--accent-color` on the hero. Everything in the hero derives its color from it: the background tint, the backdrop layers, the hover object and the active company name. All of them share `--theme-duration` / `--theme-ease`, so they change together.
+`useCompanyTheme` (`src/lib`) is the only code that writes `--accent-color`, on the hero (hover) and on the experience section (scroll). Everything in the hero derives its color from it: the background tint, the backdrop layers, the hover object and the active company name. All of them share `--theme-duration` / `--theme-ease`, so they change together.
 
 | Token | Value | Why |
 |-------|-------|-----|
@@ -154,6 +154,33 @@ Rules this follows:
 - **Weak devices.** `useFrameBudget` watches frame times. If the median drops below about 40fps, it turns off idle float, cursor parallax and dot repel for that visit. Scroll parallax, themes and the hover object stay.
 
 To add a company: add a primitive, add a `--company-<id>` alias, then add an entry to `src/content/companies.ts`. Then re-run the pixel contrast check in every hover state.
+
+
+### Experience stories (scrollytelling)
+
+Each experience is a list of scrolling steps, rendered by one generic `ExperienceStory` from data in `src/content/experiences.ts`. All stories share one pinned stage (`StoryStage`): each story has a layer in it (word, visual, step counter), and the layers crossfade when the next story reaches the center, so the stage never unpins between stories. Name, logo, role, period, anchor and theme come from `src/content/companies.ts`, matched by `companyId`, so the hero list and the story always agree. To add a story, add an entry to `experiences`; no new component is needed.
+
+Roles without a story go in `earlierRoles`: one compact row each after the stories (name, role and period, one-line summary, stack chips). Each row is its company's anchor and is tinted by its own `--role-accent`, never `--accent-color`.
+
+Every story uses the same template: arrival, context, what I did (2 or 3 steps), result, then stack and takeaway. Keep each step to 1 to 3 lines. Consecutive steps with the same label are numbered automatically ("What I did · 1/3").
+
+| Piece | Behavior |
+|-------|----------|
+| Theme takeover | The section calls `useCompanyTheme` on its own root. The story crossing the center of the screen activates its company, and the background and accents crossfade with `--theme-duration`. |
+| Active step | One `IntersectionObserver` per story, with a thin band at the vertical center. This changes only a few times per story, so it lives in state. A jump past a story (hero link, End key) settles it on its first or last step from its scroll progress. |
+| Progress line | A static track plus a fill driven by `useScroll` (a motion value, so no re-renders). Each step has a dot that fills as it is reached. |
+| Stage | Pinned. On desktop it has its own column; on phones it is pinned above the active step. A faded word per step crossfades in place, with an `01 / 07` counter on desktop. Experience-specific visuals go in the stage slot. |
+| Result numbers | A `result` step with `stats` shows up to three numbers that count up when the step arrives, with an accent rule above each. Use a `~` prefix for approximate values. Screen readers get the final value once, and the server HTML and reduced motion show the final numbers. |
+| Stack chips | Pop in one by one when the stack step arrives (`--story-chip-stagger`). |
+| 3D stage (optional) | `visuals` on an experience: named models, each with its own colors and camera. Each step's `scene.visual` picks which one is on stage, and the stage crossfades between them; a step without a scene shows only the stage word. Three.js and the models load only when the story is about a screen away, and only the visual on stage renders. A scene can drop groups in and out (`show`, highlighted ones turn `--accent-color`) or scrub the model's baked animation with scroll (`time`, in seconds, from the step's start to its end). On phones the stage word gives way to the visual, and step text gets a backdrop in the section color so it stays readable where it passes over the visual. |
+
+Rules:
+
+- **Contrast.** Company accents are used only for lines, dots, chip outlines and the decorative stage, never for small text. The inmind.ai blue is below 4.5:1, and this keeps every company safe. Chip text stays `--fg`.
+- **Seamless boundary.** `--story-tint` equals `--hero-tint` and the default accent is the same, so there is no seam where the hero ends.
+- **Reduced motion.** No fill animation and no chip pop-in (the chips are always visible). The theme, dots and stage word still follow the scroll but switch instantly. The server HTML is this static layout.
+- **No scroll-jacking.** Everything is `position: sticky` and native scrolling.
+- **3D models.** Export from Blender to `assets/models/` (top-level empties for groups that come and go, or one baked animation to scrub). Then run `npm run models` to write meshopt-compressed copies of every model to `public/models/`. Colors come from tokens, mapped per Blender material name in the visual's `colors`, never from the file. `hide` drops nodes such as a floor plane. Pieces drop in from above by default; `enter: "front"` lands them on a surface facing the camera instead, in reading order (for screens and cards). Scroll may scrub progress (assembly, flips, the camera) but never oscillation such as a wobble, which speeds up, freezes or reverses with the scroll. Under reduced motion, steps switch instantly and the camera is fixed. Without WebGL, the stage words remain.
 
 ## Example
 

@@ -10,7 +10,7 @@ import { CompanyList } from "./CompanyList";
 import { HeroBackdrop, HeroForeground } from "./HeroBackdrop";
 import { HoverObject, type PointerTarget } from "./HoverObject";
 import { NameRipples } from "./NameRipples";
-import { useCompanyTheme } from "./useCompanyTheme";
+import { useCompanyTheme } from "@/lib/useCompanyTheme";
 
 const POINTER_SPRING = { stiffness: 60, damping: 20, mass: 0.6 };
 

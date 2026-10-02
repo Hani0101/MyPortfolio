@@ -28,6 +28,8 @@ export const companies: Company[] = [
     keyword: "Logistics",
     accent: "var(--company-bmw)",
     logo: { src: "/logos/BMW_logo_(gray).svg", width: 1, height: 1, kind: "mark" },
+    role: "Software Engineering Intern",
+    period: "Sep 2025 – Feb 2026",
   },
   {
     id: "cybermeshwork",
@@ -35,6 +37,8 @@ export const companies: Company[] = [
     href: "#experience-cybermeshwork",
     keyword: "CMW",
     accent: "var(--company-cybermeshwork)",
+    role: "Software Engineer",
+    period: "Jul 2026 – Present",
   },
   {
     id: "ids",
@@ -43,6 +47,9 @@ export const companies: Company[] = [
     keyword: "IDS",
     accent: "var(--company-ids)",
     logo: { src: "/logos/ids-white.svg", width: 89.27, height: 29.38, kind: "wordmark" },
+    // TODO: placeholder, replace
+    role: "Role title",
+    period: "Start – End",
   },
   {
     id: "inmind",
@@ -52,6 +59,9 @@ export const companies: Company[] = [
     accent: "var(--company-inmind)",
     // Lowercase wordmark reads small next to the caps logos
     logo: { src: "/logos/inmind-logo.svg", width: 626.67, height: 160.26, kind: "wordmark", scale: 1.25 },
+    // TODO: placeholder, replace
+    role: "Role title",
+    period: "Start – End",
   },
   {
     id: "geek-express",
@@ -59,5 +69,8 @@ export const companies: Company[] = [
     href: "#experience-geek-express",
     keyword: "Geek",
     accent: "var(--company-geek-express)",
+    // TODO: placeholder, replace
+    role: "Role title",
+    period: "Start – End",
   },
 ];

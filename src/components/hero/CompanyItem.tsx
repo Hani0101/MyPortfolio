@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useRef, type CSSProperties, type FocusEvent, type PointerEvent } from "react";
+import { useEffect, useRef, type FocusEvent, type PointerEvent } from "react";
 import { motion, useMotionValue, useScroll, useSpring, useTransform } from "motion/react";
 import type { Company } from "@/content/companies";
 import { useMediaQuery } from "@/lib/useMediaQuery";
+import { CompanyName } from "@/components/CompanyName";
 
 // Per-item speed: 1 = moves with the page, others drift up to ~30px either way
 const SPEEDS = [0.92, 1.06, 0.97, 1.1, 0.95];
@@ -99,31 +100,5 @@ export function CompanyItem({
         </motion.div>
       </a>
     </li>
-  );
-}
-
-function CompanyName({ company }: { company: Company }) {
-  const { logo, name } = company;
-
-  if (logo?.kind === "wordmark") {
-    // Painted with currentColor through the logo's shape, so it tracks the
-    // text color and the active company color like the serif names do
-    return (
-      <>
-        <span
-          aria-hidden
-          className="logo-wordmark"
-          style={{ "--logo-src": `url("${logo.src}")`, aspectRatio: `${logo.width} / ${logo.height}`, height: `${0.8 * (logo.scale ?? 1)}em` } as CSSProperties}
-        />
-        <span className="sr-only">{name}</span>
-      </>
-    );
-  }
-
-  return (
-    <>
-      {logo && <img src={logo.src} width={logo.width} height={logo.height} alt="" className="h-[0.8em] w-auto" />}
-      {name}
-    </>
   );
 }

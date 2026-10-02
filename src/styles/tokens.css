@@ -198,6 +198,27 @@
   --theme-duration: var(--duration-3);
   --theme-ease: var(--curve-standard);
 
+  /*
+   * Experience stories. --accent-color is written at runtime by useCompanyTheme
+   * only. Accents are never used for small text here (inmind.ai blue is below
+   * 4.5:1), only for lines, dots, chip outlines and the decorative stage.
+   */
+  --story-accent-default: var(--accent);
+  --story-tint: var(--hero-tint);     /* same as the hero, so the boundary has no seam */
+  --story-word-mix: 12%;              /* phones: pinned above the active step, but other steps scroll under it */
+  --story-word-mix-wide: 20%;         /* desktop: the stage word has its own column */
+  --story-halo-mix: 22%;              /* ring around the active step dot */
+  --story-chip-mix: 8%;               /* chip fill; text stays --fg */
+  --story-chip-border-mix: 55%;
+  --story-chip-stagger: 90ms;
+
+  /* 3D stage (read by Three.js through hidden color probes). Cargo turns --accent-color when highlighted. */
+  --story-model-body: var(--stone-100);  /* truck, browser card */
+  --story-model-cargo: var(--taupe-400); /* boxes at rest */
+  --story-model-line: var(--taupe-400);  /* browser card: placeholder blocks and lines */
+  --story-model-ink: var(--taupe-800);   /* browser card: labels, outlines and icons */
+  --story-model-shadow: var(--taupe-800);/* soft blob under the model */
+
   /* Focus ring */
   --focus-ring-width: 2px;
   --focus-ring-offset: 3px;
