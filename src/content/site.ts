@@ -5,7 +5,6 @@
 
 export type NavLink = { label: string; href: string };
 
-// TODO: placeholder résumé link, point it at your PDF (for example /resume.pdf in /public).
 export const site = {
   owner: "Hani",
   /** Sections in page order; each href is the section's id */
@@ -14,5 +13,5 @@ export const site = {
     { label: "Projects", href: "#projects" },
     { label: "Contact", href: "#contact" },
   ] satisfies NavLink[],
-  resume: { label: "Résumé", href: "#" } satisfies NavLink,
+  resume: { label: "Résumé", href: "/Hani_CV.pdf" } satisfies NavLink,
 };
