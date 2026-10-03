@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useRef, type FocusEvent, type PointerEvent } from "react";
-import { motion, useMotionValue, useScroll, useSpring, useTransform } from "motion/react";
+import { memo, useEffect, useRef, type FocusEvent, type PointerEvent } from "react";
+import { useMotionValue, useScroll, useSpring, useTransform } from "motion/react";
+import * as m from "motion/react-m";
 import type { Company } from "@/content/companies";
 import { CompanyName } from "@/components/CompanyName";
 
@@ -26,7 +27,8 @@ type Props = {
   onBlurItemAction: (e: FocusEvent<HTMLAnchorElement>) => void;
 };
 
-export function CompanyItem({
+/** Memoized: a hover re-renders only the items whose `active` changed */
+export const CompanyItem = memo(function CompanyItem({
   company,
   index,
   active,
@@ -56,8 +58,9 @@ export function CompanyItem({
   const calm = useSpring(calmTarget, { stiffness: 140, damping: 22 });
   useEffect(() => calmTarget.set(active ? HOVER_CALM : 1), [active, calmTarget]);
 
-  const y = useTransform(() => baseY.get() * calm.get() * engage.get());
-  const opacity = useTransform(() => 1 - (1 - baseOpacity.get()) * engage.get());
+  // Always bound, so motion turning on after hydration needs no remount; off, they rest aligned and opaque
+  const y = useTransform(() => (animate ? baseY.get() * calm.get() * engage.get() : 0));
+  const opacity = useTransform(() => (animate ? 1 - (1 - baseOpacity.get()) * engage.get() : 1));
 
   const handlePointerEnter = (e: PointerEvent) => {
     if (e.pointerType !== "touch") onActivate(company.id);
@@ -75,26 +78,18 @@ export function CompanyItem({
         }}
         onBlur={onBlurItem}
       >
-        {/* Remount on preference change: motion keeps scroll-linked animations attached otherwise */}
-        <motion.div
-          key={animate ? "animated" : "static"}
-          style={animate ? { y } : undefined}
-          className={animate ? "will-change-transform" : undefined}
-        >
+        <m.div style={{ y }} className={animate ? "will-change-transform" : undefined}>
           {/* Names only, no logos: one treatment for every company, so the list reads as one column of type */}
-          <motion.span
-            style={animate ? { opacity } : undefined}
-            className="hero-company-name block font-heading text-h2 font-semibold"
-          >
+          <m.span style={{ opacity }} className="hero-company-name block font-heading text-h2 font-semibold">
             <CompanyName company={company} plain />
-          </motion.span>
+          </m.span>
           {(company.role || company.period) && (
             <span className="mt-1 block text-sm text-muted">
               {[company.role, company.period].filter(Boolean).join(" · ")}
             </span>
           )}
-        </motion.div>
+        </m.div>
       </a>
     </li>
   );
-}
+});

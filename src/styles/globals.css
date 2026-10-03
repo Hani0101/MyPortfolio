@@ -82,13 +82,14 @@
     font-family: var(--type-body);
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
   }
 
+  /* Kerning and ligatures where they show: headings. Body text keeps the faster default. */
   h1, h2, h3, h4 {
     font-family: var(--type-heading);
     font-weight: 600;
     text-wrap: balance;
+    text-rendering: optimizeLegibility;
   }
 
   p {
@@ -306,6 +307,11 @@
 
   .hero-drift {
     animation: hero-drift var(--float-duration, 14s) ease-in-out var(--float-delay, 0s) infinite alternate;
+  }
+
+  /* Scrolled past: pause in place (not removed, so they resume without a jump) */
+  .hero[data-in-view="false"] :is(.hero-float, .hero-drift) {
+    animation-play-state: paused;
   }
 
   /* Hover glow: soft-edged like the blobs, so it tints the list without adding a shape or a word */

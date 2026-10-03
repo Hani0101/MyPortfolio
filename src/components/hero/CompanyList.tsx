@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type FocusEvent, type PointerEvent, type RefObject } from "react";
+import { useCallback, useEffect, useRef, type FocusEvent, type PointerEvent, type RefObject } from "react";
 import type { Company } from "@/content/companies";
 import { CompanyItem } from "./CompanyItem";
 import type { PointerTarget } from "./HoverObject";
@@ -68,15 +68,22 @@ export function CompanyList({
     if (!keyboardFocusInside) onReset();
   };
 
-  // Keyboard: aim the object at the focused item instead of the cursor
-  const handleFocusItem = (el: HTMLElement) => {
-    const rect = el.getBoundingClientRect();
-    targetRef.current = { clientX: rect.left + rect.width * 0.7, clientY: rect.top + rect.height / 2 };
-  };
+  // Keyboard: aim the object at the focused item instead of the cursor.
+  // Stable callbacks, so the memoized items only re-render when their own state changes.
+  const handleFocusItem = useCallback(
+    (el: HTMLElement) => {
+      const rect = el.getBoundingClientRect();
+      targetRef.current = { clientX: rect.left + rect.width * 0.7, clientY: rect.top + rect.height / 2 };
+    },
+    [targetRef],
+  );
 
-  const handleBlurItem = (e: FocusEvent<HTMLAnchorElement>) => {
-    if (!listRef.current?.contains(e.relatedTarget as Node | null)) onReset();
-  };
+  const handleBlurItem = useCallback(
+    (e: FocusEvent<HTMLAnchorElement>) => {
+      if (!listRef.current?.contains(e.relatedTarget as Node | null)) onReset();
+    },
+    [onReset],
+  );
 
   return (
     <ul

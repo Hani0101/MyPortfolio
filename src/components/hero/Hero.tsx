@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type PointerEvent } from "react";
+import { useEffect, useMemo, useRef, type PointerEvent } from "react";
 import { useInView, useMotionValue, useSpring } from "motion/react";
 import { companies } from "@/content/companies";
 import { hero } from "@/content/hero";
@@ -37,7 +37,10 @@ export function Hero() {
   // values, not state: moving the mouse never re-renders.
   const rawX = useMotionValue(0);
   const rawY = useMotionValue(0);
-  const pointer = { x: useSpring(rawX, POINTER_SPRING), y: useSpring(rawY, POINTER_SPRING) };
+  const pointerX = useSpring(rawX, POINTER_SPRING);
+  const pointerY = useSpring(rawY, POINTER_SPRING);
+  // One object for the hero's lifetime, so the memoized layers skip hover re-renders
+  const pointer = useMemo(() => ({ x: pointerX, y: pointerY }), [pointerX, pointerY]);
 
   useEffect(() => {
     if (!lite) return;
@@ -64,6 +67,8 @@ export function Hero() {
     <section
       ref={heroRef}
       aria-labelledby="hero-title"
+      // Off screen, the CSS float animations pause (see .hero in globals.css)
+      data-in-view={inView}
       className="hero relative isolate min-h-svh overflow-clip"
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
@@ -122,7 +127,7 @@ export function Hero() {
         </div>
       </div>
 
-      <HeroForeground heroRef={heroRef} pointer={pointer} animate={animate} idle={!lite} />
+      <HeroForeground heroRef={heroRef} pointer={pointer} animate={animate} idle={!lite} inView={inView} />
     </section>
   );
 }
