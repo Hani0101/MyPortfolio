@@ -19,7 +19,7 @@ export function ExpandableImage({ media, className }: { media: Image; className:
         aria-haspopup="dialog"
         className={`group relative block cursor-zoom-in focus-visible:outline-offset-[-3px] ${className}`}
       >
-        {/* Resized and converted by Next: the frame is about 35rem wide in the desktop column, the full width on phones */}
+        {/* WebP copies from `npm run images` (see imageLoader): the frame is about 35rem wide in the desktop column, the full width on phones */}
         <NextImage
           src={media.src}
           alt=""
