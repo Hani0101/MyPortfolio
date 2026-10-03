@@ -563,6 +563,42 @@
     color: color-mix(in srgb, var(--project-accent) 75%, var(--fg));
   }
 
+  /* Lightbox: a full-screen dialog for a project image; the page behind it stops scrolling */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+  }
+
+  .lightbox[open] {
+    animation: lightbox-in var(--transition-base);
+  }
+
+  .lightbox::backdrop {
+    background-color: var(--lightbox-scrim);
+  }
+
+  .lightbox-caption {
+    color: var(--lightbox-fg);
+  }
+
+  html:has(.lightbox[open]) {
+    overflow: hidden;
+  }
+
+  @keyframes lightbox-in {
+    from {
+      opacity: 0;
+    }
+  }
+
   /* Earlier roles: each row is tinted by its own company color, whatever the section theme */
   .role-dot {
     background-color: var(--role-accent);

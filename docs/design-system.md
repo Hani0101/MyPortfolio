@@ -194,6 +194,8 @@ Every story uses the same template: arrival, context, what I did (2 or 3 steps),
 
 Every project is on the page at once (`ProjectsShowcase`, data in `src/content/projects.ts`): one row each, text on the left (number, `text-h2` title, meta, summary, stack chips, links) and its media in a browser window on a tinted stage on the right; stacked on phones. Nothing has to be clicked to see a project. Each row is tinted by its own `--project-accent` (set inline from the project's `accent`, like `--role-accent`): the stage, the placeholder sketch, the chip outlines and the links. Since project colors color link text, every `--project-*` token must stay at 4.5:1 or above on the background.
 
+Images in the window are cropped to its 16:10 frame, so each one is a button (with an expand badge in its corner) that opens the full image in a lightbox (`ImageLightbox`): a native modal `<dialog>` over a `--lightbox-scrim`, at full width so tall mockups scroll at readable size. Esc, the close button or a click outside closes it, and the page behind stops scrolling.
+
 Rules:
 
 - **Contrast.** Company accents are used only for lines, dots, chip outlines and the decorative stage, never for small text. The inmind.ai blue drops below 4.5:1 on tinted areas, and this keeps every company safe. Chip text stays `--fg`.

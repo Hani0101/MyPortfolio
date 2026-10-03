@@ -239,6 +239,8 @@
   --showcase-tint: var(--hero-tint);  /* section background, same strength as the hero and stories */
   --showcase-stage-mix: 14%;          /* the stage behind the browser window */
   --showcase-sketch-mix: 30%;         /* placeholder page sketch, so the theme shows before the media exists */
+  --lightbox-scrim: rgb(var(--shadow-tint) / 0.92); /* behind a full-size project image: warm ink, not grey */
+  --lightbox-fg: var(--white);        /* caption on the scrim, about 9:1 */
 
   /* 3D stage (read by Three.js through hidden color probes). Cargo turns --accent-color when highlighted. */
   --story-model-body: var(--white);      /* truck, browser card: lighter than everything around it */

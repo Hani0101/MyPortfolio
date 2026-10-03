@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import type { ProjectMedia as Media } from "@/content/projects";
 import { useMediaQuery } from "@/lib/useMediaQuery";
+import { ExpandableImage } from "./ImageLightbox";
 
 type Props = {
   media?: Media;
@@ -34,13 +35,7 @@ export function ProjectMedia({ media, className = "rounded-control", playing = t
     );
   }
 
-  if (media.kind === "image") {
-    return (
-      <div className={frame}>
-        <img src={media.src} alt={media.alt} width={media.width} height={media.height} loading="lazy" className="size-full object-cover object-top" />
-      </div>
-    );
-  }
+  if (media.kind === "image") return <ExpandableImage media={media} className={frame} />;
 
   if (media.kind === "youtube") {
     return (
