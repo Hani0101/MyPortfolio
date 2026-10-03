@@ -27,7 +27,8 @@ export function CompanyName({ company, plain = false }: { company: Company; plai
 
   return (
     <>
-      {logo && <img src={logo.src} width={logo.width} height={logo.height} alt="" className="h-[0.8em] w-auto" />}
+      {/* Lazy: every logo sits below the hero, so it shouldn't compete with the first screen */}
+      {logo && <img src={logo.src} width={logo.width} height={logo.height} alt="" loading="lazy" decoding="async" className="h-[0.8em] w-auto" />}
       {name}
     </>
   );
