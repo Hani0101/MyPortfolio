@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type MouseEvent } from "react";
+import NextImage from "next/image";
 import type { ProjectMedia as Media } from "@/content/projects";
 
 type Image = Extract<Media, { kind: "image" }>;
@@ -18,12 +19,13 @@ export function ExpandableImage({ media, className }: { media: Image; className:
         aria-haspopup="dialog"
         className={`group relative block cursor-zoom-in focus-visible:outline-offset-[-3px] ${className}`}
       >
-        <img
+        {/* Resized and converted by Next: the frame is about 35rem wide in the desktop column, the full width on phones */}
+        <NextImage
           src={media.src}
           alt=""
           width={media.width}
           height={media.height}
-          loading="lazy"
+          sizes="(min-width: 64rem) 35rem, 100vw"
           className="size-full object-cover object-top transition-transform duration-500 ease-standard group-hover:scale-[1.02]"
         />
         <span
@@ -71,11 +73,12 @@ function Lightbox({ media, onClose }: { media: Image; onClose: () => void }) {
         </div>
 
         <div onClick={closeOnBackdrop} className="min-h-0 flex-1 overflow-auto px-gutter pb-gutter">
-          <img
+          <NextImage
             src={media.src}
             alt={media.alt}
             width={media.width}
             height={media.height}
+            sizes="100vw"
             style={{ maxWidth: media.width }}
             className="mx-auto h-auto w-full rounded-control"
           />
