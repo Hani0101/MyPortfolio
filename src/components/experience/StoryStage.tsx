@@ -32,10 +32,12 @@ type LayerProps = {
   animate: boolean;
   /** The story on stage; the others fade out but keep their state */
   active: boolean;
+  /** The story is within a screen, so its visuals can load */
+  load: boolean;
 };
 
 /** One story's word and visual, in the shared stage's single cell. The step counter is in the section's pinned control. */
-export function StoryStageLayer({ steps, activeStep, visuals = {}, stepStarts, progress, animate, active }: LayerProps) {
+export function StoryStageLayer({ steps, activeStep, visuals = {}, stepStarts, progress, animate, active, load }: LayerProps) {
   const entries = Object.entries(visuals);
   const current = steps[activeStep]?.scene?.visual;
   // Phones: pinned in the band above the active step; a visual needs more room
@@ -74,6 +76,7 @@ export function StoryStageLayer({ steps, activeStep, visuals = {}, stepStarts, p
                   stepStarts={stepStarts}
                   progress={progress}
                   animate={animate}
+                  load={load}
                 />
               </div>
             ))}

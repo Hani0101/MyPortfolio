@@ -20,9 +20,11 @@ type Props = {
   /** Scroll progress through the story's steps, 0..1 */
   progress: MotionValue<number>;
   animate: boolean;
+  /** Load Three.js and the model; set once the story comes within a screen */
+  load: boolean;
 };
 
-export function ModelVisual({ id, visual, steps, activeStep, stepStarts, progress, animate }: Props) {
+export function ModelVisual({ id, visual, steps, activeStep, stepStarts, progress, animate, load }: Props) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const probesRef = useRef<HTMLSpanElement>(null);
@@ -62,43 +64,36 @@ export function ModelVisual({ id, visual, steps, activeStep, stepStarts, progres
     [steps, stepStarts, id, animate],
   );
 
-  // Load Three.js and the model only when the story is about a screen away
+  // Load Three.js and the model once the section says the story is about a screen away,
+  // so each story's scene (its download, WebGL context and shaders) arrives on its own
   useEffect(() => {
-    const wrap = wrapRef.current;
     const canvas = canvasRef.current;
-    if (!wrap || !canvas) return;
+    if (!load || !canvas) return;
 
     let disposed = false;
     let scene: ModelScene | null = null;
 
-    const observer = new IntersectionObserver(
-      async ([entry]) => {
-        if (!entry.isIntersecting) return;
-        observer.disconnect();
-        try {
-          const { createModelScene } = await import("./modelScene");
-          if (disposed) return;
-          const animated = animatedKey ? animatedKey.split(",") : [];
-          scene = await createModelScene({ canvas, src, animated, ghost, hide, camera, enter, light });
-        } catch {
-          return; // no WebGL or the model failed: the stage words still work
-        }
-        if (disposed) return scene.dispose();
-        sceneRef.current = scene;
-        setReady(true);
-      },
-      { rootMargin: "100% 0px" },
-    );
-    observer.observe(wrap);
+    (async () => {
+      try {
+        const { createModelScene } = await import("./modelScene");
+        if (disposed) return;
+        const animated = animatedKey ? animatedKey.split(",") : [];
+        scene = await createModelScene({ canvas, src, animated, ghost, hide, camera, enter, light });
+      } catch {
+        return; // no WebGL or the model failed: the stage words still work
+      }
+      if (disposed) return scene.dispose();
+      sceneRef.current = scene;
+      setReady(true);
+    })();
 
     return () => {
       disposed = true;
-      observer.disconnect();
       scene?.dispose();
       sceneRef.current = null;
       setReady(false);
     };
-  }, [src, ghost, hide, camera, enter, light, animatedKey]);
+  }, [load, src, ghost, hide, camera, enter, light, animatedKey]);
 
   // First paint after loading: colors and size
   useEffect(() => {

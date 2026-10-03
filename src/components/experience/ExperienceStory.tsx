@@ -24,6 +24,8 @@ type Props = {
   onActivateAction: (id: string) => void;
   onReleaseAction: (id: string) => void;
   onStageAction: (id: string, state: StageState) => void;
+  /** Called once, when the story comes within a screen of the viewport */
+  onNearAction: (id: string) => void;
 };
 
 export function ExperienceStory({
@@ -34,6 +36,7 @@ export function ExperienceStory({
   onActivateAction: onActivate,
   onReleaseAction: onRelease,
   onStageAction: onStage,
+  onNearAction: onNear,
 }: Props) {
   const storyRef = useRef<HTMLElement>(null);
   const stepsRef = useRef<HTMLOListElement>(null);
@@ -90,6 +93,22 @@ export function ExperienceStory({
       onRelease(company.id);
     };
   }, [company.id, onActivate, onRelease]);
+
+  // About a screen away: time for the section to load this story's stage visual
+  useEffect(() => {
+    const story = storyRef.current;
+    if (!story) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        observer.disconnect();
+        onNear(company.id);
+      },
+      { rootMargin: "100% 0px" },
+    );
+    observer.observe(story);
+    return () => observer.disconnect();
+  }, [company.id, onNear]);
 
   // The stage lives in the section, so it hears about step changes from here
   useEffect(() => onStage(company.id, { activeStep, stepStarts }), [onStage, company.id, activeStep, stepStarts]);
