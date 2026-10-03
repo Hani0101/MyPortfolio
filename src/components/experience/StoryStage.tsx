@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { memo, type ReactNode } from "react";
 import type { MotionValue } from "motion/react";
 import type { StoryStep, StoryVisual } from "@/content/experiences";
 import { ModelVisual } from "./visuals/ModelVisual";
@@ -36,8 +36,11 @@ type LayerProps = {
   load: boolean;
 };
 
-/** One story's word and visual, in the shared stage's single cell. The step counter is in the section's pinned control. */
-export function StoryStageLayer({ steps, activeStep, visuals = {}, stepStarts, progress, animate, active, load }: LayerProps) {
+/**
+ * One story's word and visual, in the shared stage's single cell. The step counter is in the section's pinned control.
+ * Memoized: a step change in one story leaves the other stories' layers alone.
+ */
+export const StoryStageLayer = memo(function StoryStageLayer({ steps, activeStep, visuals = {}, stepStarts, progress, animate, active, load }: LayerProps) {
   const entries = Object.entries(visuals);
   const current = steps[activeStep]?.scene?.visual;
   // Phones: pinned in the band above the active step; a visual needs more room
@@ -85,4 +88,4 @@ export function StoryStageLayer({ steps, activeStep, visuals = {}, stepStarts, p
       </div>
     </div>
   );
-}
+});

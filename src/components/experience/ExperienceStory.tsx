@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { motion, useMotionValueEvent, useScroll, type MotionValue } from "motion/react";
+import { memo, useEffect, useRef, useState } from "react";
+import { useMotionValueEvent, useScroll, type MotionValue } from "motion/react";
+import * as m from "motion/react-m";
 import type { Company } from "@/content/companies";
 import type { Experience, StoryStep } from "@/content/experiences";
 import { StoryStepContent } from "./StoryStepContent";
@@ -28,7 +29,8 @@ type Props = {
   onNearAction: (id: string) => void;
 };
 
-export function ExperienceStory({
+/** Memoized: the section re-renders on every step change, but a story only needs to for its own */
+export const ExperienceStory = memo(function ExperienceStory({
   experience,
   company,
   animate,
@@ -57,7 +59,9 @@ export function ExperienceStory({
     if (!list) return;
     const measure = () => {
       const height = list.offsetHeight || 1;
-      setStepStarts([...list.querySelectorAll<HTMLElement>("[data-step]")].map((step) => step.offsetTop / height));
+      const next = [...list.querySelectorAll<HTMLElement>("[data-step]")].map((step) => step.offsetTop / height);
+      // Unchanged: keep the old array, so the section and stage don't re-render for nothing
+      setStepStarts((current) => (next.every((start, i) => start === current[i]) ? current : next));
     };
     measure();
     const observer = new ResizeObserver(measure);
@@ -131,7 +135,7 @@ export function ExperienceStory({
       <ol ref={stepsRef} className="relative">
         <span aria-hidden className="story-track absolute inset-y-0 left-0 w-px" />
         {animate && (
-          <motion.span
+          <m.span
             aria-hidden
             style={{ scaleY: scrollYProgress }}
             className="story-fill absolute inset-y-0 left-0 w-px origin-top"
@@ -168,7 +172,7 @@ export function ExperienceStory({
       </ol>
     </article>
   );
-}
+});
 
 /** Numbers runs of steps that share a label: "What I did · 1/3", "2/3"... */
 function numberLabels(steps: StoryStep[]): (string | undefined)[] {
