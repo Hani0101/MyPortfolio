@@ -25,8 +25,9 @@
   --color-danger: var(--danger);
   --color-success: var(--success);
 
-  /* Fonts: font-heading, font-sans (default body), font-mono */
+  /* Fonts: font-heading, font-heading-italic (pair with italic), font-sans (default body), font-mono */
   --font-heading: var(--type-heading);
+  --font-heading-italic: var(--type-heading-italic);
   --font-sans: var(--type-body);
   --font-mono: var(--type-code);
 
@@ -561,6 +562,13 @@
 
   .project-links a:hover {
     color: color-mix(in srgb, var(--project-accent) 75%, var(--fg));
+  }
+
+  /* Video thumbnail: the play button takes the project's color. --project-* tokens hold 4.5:1 on the background, so white on them does too. */
+  .project-play {
+    background-color: var(--project-accent, var(--accent));
+    color: var(--accent-fg);
+    box-shadow: var(--elevation-2);
   }
 
   /* Lightbox: a full-screen dialog for a project image; the page behind it stops scrolling */

@@ -8,8 +8,7 @@ Soft, professional and welcoming. Single light theme.
 |------|------|
 | `src/styles/tokens.css` | Source of truth: primitive, semantic and component tokens |
 | `src/styles/globals.css` | Tailwind v4 entry: maps semantic tokens to utilities and sets base styles |
-| `src/lib/fonts.ts` | `next/font` loaders for Playfair Display (local) and Inter (Google) |
-| `src/fonts/` | Playfair Display variable fonts and their OFL license |
+| `src/lib/fonts.ts` | `next/font/google` loaders for Playfair Display (normal and italic) and Inter, self-hosted at build time as subset WOFF2 |
 
 ## Setup (Next.js App Router)
 
@@ -66,6 +65,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 | `text-base` / `text-sm` | Inter | 16 / 14px | Body, metadata |
 
 `h1` to `h4` automatically use `font-heading` at weight 600. Body defaults to Inter (`font-sans`).
+
+Italic Playfair is a separate family that isn't preloaded, so the hero's fonts load first: use `font-heading-italic italic`, not `font-heading italic` (that would fake the slant).
 
 ### Layout, shape, elevation, motion
 

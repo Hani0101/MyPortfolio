@@ -64,7 +64,7 @@ export function StoryStepContent({ step, label, company, location, titleId, reve
               </li>
             ))}
           </ul>
-          <p className="mt-6 max-w-prose font-heading text-h3 italic">{step.takeaway}</p>
+          <p className="mt-6 max-w-prose font-heading-italic text-h3 italic">{step.takeaway}</p>
         </>
       );
   }
