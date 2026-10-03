@@ -15,14 +15,22 @@ type Props = {
   animate: boolean;
 };
 
+/**
+ * The story's high point, so the numbers are the biggest type in it: one per
+ * row, number then label, which gives each label room to stay on one or two lines.
+ */
 export function StoryStats({ stats, revealed, animate }: Props) {
   return (
-    <dl className="mt-6 grid grid-cols-3 gap-4 sm:gap-6">
+    <dl className="mt-6 grid gap-4">
       {stats.map((stat, index) => (
-        // Number first visually, label first in the DOM (dt before dd); justify-end keeps numbers aligned at the top
-        <div key={stat.label} className="story-stat flex flex-col-reverse justify-end pt-3">
-          <dt className="mt-1 text-sm text-muted">{stat.label}</dt>
-          <dd className="font-heading text-h2 font-semibold">
+        // Number first visually, label first in the DOM (dt before dd). Phones stack them;
+        // wider screens put the label beside a fixed-width number, so the labels line up.
+        <div
+          key={stat.label}
+          className="story-stat flex flex-col-reverse pt-3 sm:flex-row-reverse sm:items-baseline sm:justify-end sm:gap-5"
+        >
+          <dt className="mt-1 text-muted sm:mt-0">{stat.label}</dt>
+          <dd className="shrink-0 font-heading text-h1 font-semibold leading-none sm:w-[2.4em]">
             <Counter stat={stat} run={revealed} animate={animate} delay={index * COUNT_STAGGER} />
           </dd>
         </div>

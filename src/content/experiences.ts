@@ -78,6 +78,8 @@ export type Experience = {
 export const experienceSection = {
   title: "Experience",
   lead: "Where I've worked, what I built there and what it taught me.",
+  /** The pinned control under the stories: "Next: Cybermeshwork" */
+  next: "Next",
 };
 
 export const experiences: Experience[] = [
@@ -249,17 +251,17 @@ export const earlierRolesSection = {
 export const earlierRoles: EarlierRole[] = [
   {
     companyId: "ids",
-    summary: "One line on what you built there and what it changed.",
-    stack: ["Tech one", "Tech two", "Tech three"],
+    summary: "Built a tech focused social media platform from scratch as part of a team, where users can share problems they are facing and discuss different topics. Users were able to format their posts in Markdown, follow one another, and upvote posts.",
+    stack: ["React", ".NET", "Tailwind CSS", "MySQL"],
   },
   {
     companyId: "inmind",
-    summary: "One line on what you built there and what it changed.",
-    stack: ["Tech one", "Tech two", "Tech three"],
+    summary: "Built an ecommerce website from scratch(Design and Frontend), the website was focused on UI/UX aspect and its frontend technicalities. The final product was a fully functional traditional ecommerce site with an admin page to manage the products and orders.",
+    stack: ["Angular", "Figma", "SCSS", ".NET"],
   },
   {
     companyId: "geek-express",
-    summary: "One line on what you built there and what it changed.",
-    stack: ["Tech one", "Tech two", "Tech three"],
+    summary: "Taught over 50+ students basic and advanced programming concepts and guided them through their projects.",
+    stack: ["HTML", "CSS", "JavaScript", "Python", "Pygame", "Pandas", "Scikit-learn"],
   },
 ];

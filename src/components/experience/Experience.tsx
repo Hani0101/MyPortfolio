@@ -3,18 +3,32 @@
 import { useCallback, useRef, useState } from "react";
 import { motionValue } from "motion/react";
 import { companies } from "@/content/companies";
-import { experiences, experienceSection } from "@/content/experiences";
+import { earlierRolesSection, experiences, experienceSection } from "@/content/experiences";
+import { projectsSection } from "@/content/projects";
 import { useCompanyTheme } from "@/lib/useCompanyTheme";
 import { useMediaQuery } from "@/lib/useMediaQuery";
-import { EarlierRoles } from "./EarlierRoles";
+import { EarlierRoles, earlierRolesAnchor } from "./EarlierRoles";
 import { ExperienceStory, type StageState } from "./ExperienceStory";
 import { StoryStage, StoryStageLayer } from "./StoryStage";
+
+const pad = (n: number) => String(n).padStart(2, "0");
 
 const companiesById = new Map(companies.map((c) => [c.id, c]));
 const stories = experiences.flatMap((experience) => {
   const company = companiesById.get(experience.companyId);
   return company ? [{ experience, company }] : [];
 });
+
+// Where the pinned "Next" control leads from each story: the next story, then whatever follows the stories
+const afterStories = earlierRolesAnchor
+  ? { href: earlierRolesAnchor, label: earlierRolesSection.title }
+  : { href: "#projects", label: projectsSection.title };
+const nextOf = new Map(
+  stories.map(({ company }, i) => {
+    const next = stories[i + 1]?.company;
+    return [company.id, next ? { href: next.href, label: next.name } : afterStories];
+  }),
+);
 
 export function Experience() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -49,6 +63,9 @@ export function Experience() {
   );
   const handleStage = useCallback((id: string, state: StageState) => setStages((all) => ({ ...all, [id]: state })), []);
   const [progress] = useState(() => new Map(stories.map(({ company }) => [company.id, motionValue(0)])));
+
+  const onStage = stories.find(({ company }) => company.id === onStageId);
+  const next = onStage && nextOf.get(onStage.company.id);
 
   return (
     <section ref={sectionRef} id="experience" aria-labelledby="experience-title" className="experience relative isolate">
@@ -89,6 +106,19 @@ export function Experience() {
               onStageAction={handleStage}
             />
           ))}
+
+          {onStage && next && (
+            // Sticks to the bottom of the screen while the stories scroll, then settles
+            // under the last one: where the reader is, and a way past a long story
+            <div className="story-hud sticky bottom-6 z-20 ml-8 mt-12 flex w-fit items-center gap-1 rounded-pill p-1 pl-4 text-sm sm:ml-10">
+              <span aria-hidden className="pr-2 font-medium tabular-nums text-muted">
+                {pad(stages[onStage.company.id].activeStep + 1)} / {pad(onStage.experience.steps.length)}
+              </span>
+              <a href={next.href} className="story-skip rounded-pill px-3 py-1.5 font-medium">
+                {experienceSection.next}: {next.label} <span aria-hidden>↓</span>
+              </a>
+            </div>
+          )}
         </div>
       </div>
 

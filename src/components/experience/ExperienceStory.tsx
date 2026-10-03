@@ -124,7 +124,11 @@ export function ExperienceStory({
             key={index}
             data-step={index}
             data-state={index < activeStep ? "passed" : index === activeStep ? "active" : "upcoming"}
-            className="story-step relative min-h-[65svh] pl-8 sm:pl-10"
+            // Desktop: short enough that the next step is already in view, since the stage
+            // has its own pinned column. Phones: tall enough that the previous step has
+            // scrolled clear of the visual pinned above by the time the next one arrives.
+            // The bottom padding keeps a gap after tall steps, such as the result numbers.
+            className="story-step relative min-h-[65svh] pb-16 pl-8 sm:pl-10 lg:min-h-[40svh]"
           >
             <span aria-hidden className="story-dot absolute left-0 top-1 size-3 -translate-x-1/2 rounded-full" />
             <div className="story-step-body">
@@ -134,7 +138,9 @@ export function ExperienceStory({
                 company={company}
                 location={experience.location}
                 titleId={titleId}
-                revealed={!animate || index <= activeStep}
+                // Numbers count up on arrival; stack chips pop in one step early, while
+                // their step is already in view below, so it never shows an empty gap
+                revealed={!animate || index <= activeStep + (step.kind === "stack" ? 1 : 0)}
                 animate={animate}
               />
             </div>

@@ -9,6 +9,9 @@ const rows = earlierRoles.flatMap((role) => {
   return company ? [{ role, company }] : [];
 });
 
+/** Anchor for the stories' "Next" control; undefined when there are no rows to show */
+export const earlierRolesAnchor = rows.length ? "#earlier-roles" : undefined;
+
 /**
  * Roles without a story: one compact row each, so the section ends with
  * something that reads in seconds. Each row is the hero list's anchor for its company.
@@ -17,7 +20,7 @@ export function EarlierRoles() {
   if (!rows.length) return null;
 
   return (
-    <div className="mx-auto max-w-content px-gutter pb-section pt-section">
+    <div id="earlier-roles" className="mx-auto max-w-content px-gutter pb-section pt-section">
       <h3 id="earlier-roles-title" className="text-h3">
         {earlierRolesSection.title}
       </h3>

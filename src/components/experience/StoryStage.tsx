@@ -3,8 +3,6 @@ import type { MotionValue } from "motion/react";
 import type { StoryStep, StoryVisual } from "@/content/experiences";
 import { ModelVisual } from "./visuals/ModelVisual";
 
-const pad = (n: number) => String(n).padStart(2, "0");
-
 /**
  * The pinned stage, shared by every story in the section: it stays put from the
  * first story to the last, and the stories' layers crossfade inside it, so moving
@@ -36,7 +34,7 @@ type LayerProps = {
   active: boolean;
 };
 
-/** One story's word, visual and step counter, in the shared stage's single cell */
+/** One story's word and visual, in the shared stage's single cell. The step counter is in the section's pinned control. */
 export function StoryStageLayer({ steps, activeStep, visuals = {}, stepStarts, progress, animate, active }: LayerProps) {
   const entries = Object.entries(visuals);
   const current = steps[activeStep]?.scene?.visual;
@@ -81,10 +79,6 @@ export function StoryStageLayer({ steps, activeStep, visuals = {}, stepStarts, p
             ))}
           </div>
         )}
-
-        <p className="mt-6 hidden font-mono text-sm text-muted lg:row-start-3 lg:block">
-          {pad(activeStep + 1)} / {pad(steps.length)}
-        </p>
       </div>
     </div>
   );
