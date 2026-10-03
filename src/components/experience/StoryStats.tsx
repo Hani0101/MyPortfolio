@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
-import { animate as animateValue, motion, useMotionValue, useTransform } from "motion/react";
+import { animate as animateValue, useMotionValue, useTransform } from "motion/react";
+import * as m from "motion/react-m";
 import type { Stat } from "@/content/experiences";
 
 const COUNT_SECONDS = 1.2;
@@ -55,9 +56,9 @@ function Counter({ stat, run, animate, delay }: { stat: Stat; run: boolean; anim
   return (
     <>
       {/* The ticking number is visual only; screen readers get the final value once */}
-      <motion.span aria-hidden className="lining-nums tabular-nums">
+      <m.span aria-hidden className="lining-nums tabular-nums">
         {text}
-      </motion.span>
+      </m.span>
       <span className="sr-only">{`${prefix}${value}${suffix}`}</span>
     </>
   );

@@ -1,9 +1,14 @@
 /**
  * Projects showcase: every project is shown at once, each in a browser window
- * tinted by its accent. Put media files in /public/projects.
+ * tinted by its accent.
+ *
+ * Images: put the original in assets/project_images and run `npm run images`,
+ * which writes the WebP copies the page loads into public/project_images.
+ * `src` still names the original, e.g. "/project_images/shot.png".
  */
 
 export type ProjectMedia =
+  /** `width`/`height` are the original's pixel size */
   | { kind: "image"; src: string; alt: string; width: number; height: number }
   /** Muted and looping; under reduced motion only the poster shows. `label` describes the clip. */
   | { kind: "video"; src: string; poster?: string; label: string }
@@ -30,7 +35,7 @@ export const projectsSection = {
   lead: "A few things I've built, and what each one taught me.",
 };
 
-// TODO: placeholder copy and links, replace with your own. Add `media` once the files are in /public/projects.
+// TODO: placeholder copy and links, replace with your own. Add `media` once the files are ready (see the image note above).
 export const projects: Project[] = [
   {
     id: "project-one",

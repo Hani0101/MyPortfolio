@@ -1,14 +1,20 @@
-import localFont from "next/font/local";
-import { Inter } from "next/font/google";
+import { Inter, Playfair_Display } from "next/font/google";
 
-// Headings: Playfair Display (self-hosted variable font, weights 400-900)
-export const playfair = localFont({
-  src: [
-    { path: "../fonts/PlayfairDisplay-VariableFont_wght.ttf", weight: "400 900", style: "normal" },
-    { path: "../fonts/PlayfairDisplay-Italic-VariableFont_wght.ttf", weight: "400 900", style: "italic" },
-  ],
+// Headings: Playfair Display (variable font, weights 400-900), self-hosted by next/font as subset WOFF2
+export const playfair = Playfair_Display({
+  subsets: ["latin"],
   variable: "--font-playfair",
   display: "swap",
+});
+
+// Italic: its own family so it isn't preloaded; it only sets one line deep in the
+// page, so it shouldn't compete with the hero's fonts. Use font-heading-italic.
+export const playfairItalic = Playfair_Display({
+  subsets: ["latin"],
+  style: "italic",
+  variable: "--font-playfair-italic",
+  display: "swap",
+  preload: false,
 });
 
 // Body: Inter
@@ -18,5 +24,5 @@ export const inter = Inter({
   display: "swap",
 });
 
-// Apply to <html> so tokens.css can resolve --font-playfair / --font-inter
-export const fontVariables = `${playfair.variable} ${inter.variable}`;
+// Apply to <html> so tokens.css can resolve --font-playfair / --font-playfair-italic / --font-inter
+export const fontVariables = `${playfair.variable} ${playfairItalic.variable} ${inter.variable}`;

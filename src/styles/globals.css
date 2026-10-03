@@ -25,8 +25,9 @@
   --color-danger: var(--danger);
   --color-success: var(--success);
 
-  /* Fonts: font-heading, font-sans (default body), font-mono */
+  /* Fonts: font-heading, font-heading-italic (pair with italic), font-sans (default body), font-mono */
   --font-heading: var(--type-heading);
+  --font-heading-italic: var(--type-heading-italic);
   --font-sans: var(--type-body);
   --font-mono: var(--type-code);
 
@@ -81,13 +82,14 @@
     font-family: var(--type-body);
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
   }
 
+  /* Kerning and ligatures where they show: headings. Body text keeps the faster default. */
   h1, h2, h3, h4 {
     font-family: var(--type-heading);
     font-weight: 600;
     text-wrap: balance;
+    text-rendering: optimizeLegibility;
   }
 
   p {
@@ -307,6 +309,11 @@
     animation: hero-drift var(--float-duration, 14s) ease-in-out var(--float-delay, 0s) infinite alternate;
   }
 
+  /* Scrolled past: pause in place (not removed, so they resume without a jump) */
+  .hero[data-in-view="false"] :is(.hero-float, .hero-drift) {
+    animation-play-state: paused;
+  }
+
   /* Hover glow: soft-edged like the blobs, so it tints the list without adding a shape or a word */
   .hero-object-glow {
     background-color: var(--accent-color);
@@ -463,6 +470,8 @@
    * the section background. Invisible on plain background, it only hides
    * the visual where text passes over it. It fades in over its top padding,
    * so the visual gets a soft edge instead of looking cut off by a line.
+   * No backdrop blur: at 90% the fill already hides the visual, and a blur on
+   * every step scrolling over the live 3D canvas is costly on phone GPUs.
    */
   @media (max-width: 63.98rem) {
     .story-step-body {
@@ -471,7 +480,6 @@
       padding: var(--fade) 0.75rem 0.75rem;
       border-radius: var(--radius-3);
       background-color: color-mix(in srgb, var(--story-bg) 90%, transparent);
-      backdrop-filter: blur(6px);
       mask-image: linear-gradient(to bottom, transparent, black var(--fade));
     }
   }
@@ -561,6 +569,49 @@
 
   .project-links a:hover {
     color: color-mix(in srgb, var(--project-accent) 75%, var(--fg));
+  }
+
+  /* Video thumbnail: the play button takes the project's color. --project-* tokens hold 4.5:1 on the background, so white on them does too. */
+  .project-play {
+    background-color: var(--project-accent, var(--accent));
+    color: var(--accent-fg);
+    box-shadow: var(--elevation-2);
+  }
+
+  /* Lightbox: a full-screen dialog for a project image; the page behind it stops scrolling */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+  }
+
+  .lightbox[open] {
+    animation: lightbox-in var(--transition-base);
+  }
+
+  .lightbox::backdrop {
+    background-color: var(--lightbox-scrim);
+  }
+
+  .lightbox-caption {
+    color: var(--lightbox-fg);
+  }
+
+  html:has(.lightbox[open]) {
+    overflow: hidden;
+  }
+
+  @keyframes lightbox-in {
+    from {
+      opacity: 0;
+    }
   }
 
   /* Earlier roles: each row is tinted by its own company color, whatever the section theme */

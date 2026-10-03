@@ -64,6 +64,12 @@ export function Experience() {
   const handleStage = useCallback((id: string, state: StageState) => setStages((all) => ({ ...all, [id]: state })), []);
   const [progress] = useState(() => new Map(stories.map(({ company }) => [company.id, motionValue(0)])));
 
+  // Stories that have come within a screen; their stage visuals load then. Every
+  // story shares the one pinned stage, so the stage being on screen can't tell
+  // them apart. One-way: a loaded visual stays loaded.
+  const [near, setNear] = useState<ReadonlySet<string>>(() => new Set());
+  const handleNear = useCallback((id: string) => setNear((all) => (all.has(id) ? all : new Set(all).add(id))), []);
+
   const onStage = stories.find(({ company }) => company.id === onStageId);
   const next = onStage && nextOf.get(onStage.company.id);
 
@@ -89,6 +95,7 @@ export function Experience() {
               progress={progress.get(company.id)!}
               animate={animate}
               active={company.id === onStageId}
+              load={near.has(company.id)}
             />
           ))}
         </StoryStage>
@@ -104,6 +111,7 @@ export function Experience() {
               onActivateAction={handleActivate}
               onReleaseAction={release}
               onStageAction={handleStage}
+              onNearAction={handleNear}
             />
           ))}
 

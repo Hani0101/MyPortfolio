@@ -1,7 +1,8 @@
 "use client";
 
-import { motion, useScroll, useTransform, type MotionValue } from "motion/react";
-import type { CSSProperties, ReactNode, RefObject } from "react";
+import { useScroll, useTransform, type MotionValue } from "motion/react";
+import * as m from "motion/react-m";
+import { memo, type CSSProperties, type ReactNode, type RefObject } from "react";
 import { DotGrid } from "./DotGrid";
 import type { PointerTarget } from "./HoverObject";
 
@@ -24,6 +25,8 @@ type LayerProps = {
   animate: boolean;
   /** Idle float on. Turned off on weak devices (see useFrameBudget). */
   idle: boolean;
+  /** Hero on screen. Off screen nothing moves, so the layers give up their GPU memory. */
+  inView: boolean;
 };
 
 type Depth = { scroll: number; drift: number };
@@ -35,7 +38,11 @@ const NEAR: Depth = { scroll: -180, drift: 34 };
 
 const MID_TILT = 6; // degrees toward the cursor at the hero edge
 
-/** Applies scroll + pointer parallax for one depth. Static when animate is off. */
+/**
+ * Applies scroll + pointer parallax for one depth. The style stays bound to the
+ * same motion values whether or not motion is allowed, so turning it on after
+ * hydration (or off later) never needs a remount: off, they just rest at 0.
+ */
 function Parallax({
   progress,
   pointer,
@@ -43,6 +50,7 @@ function Parallax({
   speed = 1,
   tilt = 0,
   animate,
+  inView,
   className,
   children,
 }: {
@@ -52,18 +60,21 @@ function Parallax({
   speed?: number;
   tilt?: number;
   animate: boolean;
+  inView: boolean;
   className: string;
   children?: ReactNode;
 }) {
-  const y = useTransform(() => progress.get() * depth.scroll * speed - pointer.y.get() * depth.drift);
-  const x = useTransform(() => -pointer.x.get() * depth.drift);
-  const rotate = useTransform(() => pointer.x.get() * tilt);
+  // A transform only subscribes to the values it reads, so at rest it follows nothing
+  const y = useTransform(() => (animate ? progress.get() * depth.scroll * speed - pointer.y.get() * depth.drift : 0));
+  const x = useTransform(() => (animate ? -pointer.x.get() * depth.drift : 0));
+  const rotate = useTransform(() => (animate && tilt ? pointer.x.get() * tilt : 0));
 
   return (
-    // will-change: own GPU layer, so moving masked blobs and big rings never repaints
-    <motion.div style={animate ? { x, y, rotate, willChange: "transform" } : undefined} className={className}>
+    // will-change: own GPU layer, so moving masked blobs and big rings never repaints.
+    // Only while the hero is on screen; past it nothing moves and the layer can go.
+    <m.div style={{ x, y, rotate, willChange: animate && inView ? "transform" : "auto" }} className={className}>
       {children}
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -125,19 +136,16 @@ const SPECKS: { className: string; speed: number; float: number; delay: number }
 type BackdropProps = LayerProps & {
   cursorRef: RefObject<PointerTarget>;
   interactive: boolean;
-  inView: boolean;
 };
 
-/** Far and mid layers, behind the content. */
-export function HeroBackdrop({ heroRef, pointer, animate, idle, cursorRef, interactive, inView }: BackdropProps) {
+/** Far and mid layers, behind the content. Memoized: hovering a company changes the theme, not these. */
+export const HeroBackdrop = memo(function HeroBackdrop({ heroRef, pointer, animate, idle, inView, cursorRef, interactive }: BackdropProps) {
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
-  const layer = { progress: scrollYProgress, pointer, animate };
+  const layer = { progress: scrollYProgress, pointer, animate, inView };
 
   return (
-    // Remount on preference change: motion keeps scroll-linked animations attached otherwise.
-    // Fades out toward the bottom, so the grain and blobs never end in a line where the experience section starts.
+    // Fades out toward the bottom, so the grain and blobs never end in a line where the experience section starts
     <div
-      key={animate ? "animated" : "static"}
       aria-hidden
       className="pointer-events-none absolute inset-0 -z-10 [mask-image:linear-gradient(to_bottom,black_70%,transparent)]"
     >
@@ -155,7 +163,7 @@ export function HeroBackdrop({ heroRef, pointer, animate, idle, cursorRef, inter
       <div className="hero-grain absolute inset-0" />
 
       <Parallax {...layer} depth={GRID} className="absolute inset-0 [mask-image:linear-gradient(to_bottom,black_75%,transparent)]">
-        <DotGrid cursorRef={cursorRef} interactive={interactive} inView={inView} />
+        <DotGrid heroRef={heroRef} cursorRef={cursorRef} interactive={interactive} inView={inView} />
       </Parallax>
 
       {/* Mid */}
@@ -175,15 +183,15 @@ export function HeroBackdrop({ heroRef, pointer, animate, idle, cursorRef, inter
       ))}
     </div>
   );
-}
+});
 
-/** Near layer: a few faint specks drifting in front of the content. */
-export function HeroForeground({ heroRef, pointer, animate, idle }: LayerProps) {
+/** Near layer: a few faint specks drifting in front of the content. Memoized like the backdrop. */
+export const HeroForeground = memo(function HeroForeground({ heroRef, pointer, animate, idle, inView }: LayerProps) {
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
-  const layer = { progress: scrollYProgress, pointer, animate };
+  const layer = { progress: scrollYProgress, pointer, animate, inView };
 
   return (
-    <div key={animate ? "animated" : "static"} aria-hidden className="pointer-events-none absolute inset-0 z-20">
+    <div aria-hidden className="pointer-events-none absolute inset-0 z-20">
       {SPECKS.map((speck, i) => (
         <Parallax key={i} {...layer} depth={NEAR} speed={speck.speed} className={`absolute ${speck.className}`}>
           <Float animate={animate && idle} kind="drift" duration={speck.float} delay={speck.delay}>
@@ -193,4 +201,4 @@ export function HeroForeground({ heroRef, pointer, animate, idle }: LayerProps) 
       ))}
     </div>
   );
-}
+});

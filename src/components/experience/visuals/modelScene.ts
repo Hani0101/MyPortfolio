@@ -1,6 +1,7 @@
 /**
  * Imperative Three.js scene for a story's 3D stage. Loaded with a dynamic
- * import, so Three.js only downloads when a story with a model comes near.
+ * import, so Three.js only downloads when a story with a model comes near,
+ * and each story's scene only when that story does.
  *
  * Renders on demand: a frame is drawn only while something moves (boxes,
  * colors, camera, animation time), never in an idle loop.
@@ -325,6 +326,11 @@ export async function createModelScene({
     update(0);
     renderer.render(scene, camera);
   };
+
+  // Compile every shader before the first frame, in parallel where the browser
+  // supports it (KHR_parallel_shader_compile), so the first render doesn't
+  // stall the page in the middle of a scroll
+  await renderer.compileAsync(scene, camera);
 
   return {
     setState({ show, highlight }, instant) {

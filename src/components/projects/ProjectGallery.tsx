@@ -4,9 +4,9 @@ import { useState } from "react";
 import type { ProjectMedia as Media } from "@/content/projects";
 import { ProjectMedia } from "./ProjectMedia";
 
-const tabLabel = (item: Media, index: number) => {
+const tabLabel = (item: Media) => {
   if (item.kind === "image") return item.alt.toLowerCase().includes("wireframe") ? "Wireframe" : "Mockup";
-  return item.kind === "video" ? "Video" : `Media ${index + 1}`;
+  return item.kind === "video" ? "Video" : "Media";
 };
 
 /** A project's media; with several items, tabs switch between them and only the shown one plays */
@@ -27,7 +27,7 @@ export function ProjectGallery({ items }: { items: Media[] }) {
             onClick={() => setActive(i)}
             className={`rounded-pill px-3 py-1 text-sm font-medium ${i === active ? "bg-background text-foreground" : "text-muted hover:text-foreground"}`}
           >
-            {tabLabel(item, i)}
+            {tabLabel(item)}
           </button>
         ))}
       </div>

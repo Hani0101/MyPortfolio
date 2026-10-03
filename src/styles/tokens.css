@@ -46,8 +46,9 @@
   /* Shadow tint: taupe-800 as RGB channels */
   --shadow-tint: 75 69 63;
 
-  /* Font stacks; --font-playfair / --font-inter are injected by next/font */
+  /* Font stacks; --font-playfair / --font-playfair-italic / --font-inter are injected by next/font */
   --family-serif: var(--font-playfair), "Playfair Display", Georgia, "Times New Roman", serif;
+  --family-serif-italic: var(--font-playfair-italic), "Playfair Display", Georgia, "Times New Roman", serif;
   --family-sans: var(--font-inter), "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --family-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
 
@@ -105,6 +106,7 @@
 
   /* Typography */
   --type-heading: var(--family-serif);
+  --type-heading-italic: var(--family-serif-italic); /* separate family, loaded without a preload */
   --type-body: var(--family-sans);
   --type-code: var(--family-mono);
 
@@ -239,6 +241,8 @@
   --showcase-tint: var(--hero-tint);  /* section background, same strength as the hero and stories */
   --showcase-stage-mix: 14%;          /* the stage behind the browser window */
   --showcase-sketch-mix: 30%;         /* placeholder page sketch, so the theme shows before the media exists */
+  --lightbox-scrim: rgb(var(--shadow-tint) / 0.92); /* behind a full-size project image: warm ink, not grey */
+  --lightbox-fg: var(--white);        /* caption on the scrim, about 9:1 */
 
   /* 3D stage (read by Three.js through hidden color probes). Cargo turns --accent-color when highlighted. */
   --story-model-body: var(--white);      /* truck, browser card: lighter than everything around it */

@@ -8,8 +8,7 @@ Soft, professional and welcoming. Single light theme.
 |------|------|
 | `src/styles/tokens.css` | Source of truth: primitive, semantic and component tokens |
 | `src/styles/globals.css` | Tailwind v4 entry: maps semantic tokens to utilities and sets base styles |
-| `src/lib/fonts.ts` | `next/font` loaders for Playfair Display (local) and Inter (Google) |
-| `src/fonts/` | Playfair Display variable fonts and their OFL license |
+| `src/lib/fonts.ts` | `next/font/google` loaders for Playfair Display (normal and italic) and Inter, self-hosted at build time as subset WOFF2 |
 
 ## Setup (Next.js App Router)
 
@@ -66,6 +65,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 | `text-base` / `text-sm` | Inter | 16 / 14px | Body, metadata |
 
 `h1` to `h4` automatically use `font-heading` at weight 600. Body defaults to Inter (`font-sans`).
+
+Italic Playfair is a separate family that isn't preloaded, so the hero's fonts load first: use `font-heading-italic italic`, not `font-heading italic` (that would fake the slant).
 
 ### Layout, shape, elevation, motion
 
@@ -193,6 +194,8 @@ Every story uses the same template: arrival, context, what I did (2 or 3 steps),
 ### Projects
 
 Every project is on the page at once (`ProjectsShowcase`, data in `src/content/projects.ts`): one row each, text on the left (number, `text-h2` title, meta, summary, stack chips, links) and its media in a browser window on a tinted stage on the right; stacked on phones. Nothing has to be clicked to see a project. Each row is tinted by its own `--project-accent` (set inline from the project's `accent`, like `--role-accent`): the stage, the placeholder sketch, the chip outlines and the links. Since project colors color link text, every `--project-*` token must stay at 4.5:1 or above on the background.
+
+Images in the window are cropped to its 16:10 frame, so each one is a button (with an expand badge in its corner) that opens the full image in a lightbox (`ImageLightbox`): a native modal `<dialog>` over a `--lightbox-scrim`, at full width so tall mockups scroll at readable size. Esc, the close button or a click outside closes it, and the page behind stops scrolling.
 
 Rules:
 
