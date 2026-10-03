@@ -1,6 +1,6 @@
 /**
- * Projects showcase: a list of projects, and the selected one is shown in a
- * browser window themed by its accent. Put media files in /public/projects.
+ * Projects showcase: every project is shown at once, each in a browser window
+ * tinted by its accent. Put media files in /public/projects.
  */
 
 export type ProjectMedia =
@@ -19,15 +19,13 @@ export type Project = {
   links: { label: string; href: string }[];
   /** Leave out to show a placeholder until the file is ready */
   media?: ProjectMedia;
-  /** Theme color while the project is selected in the showcase; a --project-* token from tokens.css */
+  /** Tints the project's stage, chips and links; a --project-* token from tokens.css (>= 4.5:1, it colors link text) */
   accent?: string;
 };
 
 export const projectsSection = {
   title: "Projects",
   lead: "A few things I've built, and what each one taught me.",
-  /** Above the showcase's project list */
-  pick: "Select a project",
 };
 
 // TODO: placeholder copy and links, replace with your own. Add `media` once the files are in /public/projects.

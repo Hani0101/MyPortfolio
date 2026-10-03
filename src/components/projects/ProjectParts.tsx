@@ -1,9 +1,8 @@
 import type { Project } from "@/content/projects";
 
 /** Small pieces of the projects showcase */
-export const LABEL = "text-sm font-medium uppercase tracking-[0.2em] text-muted";
 
-/** Tag spec by default; the showcase passes chips tinted by the selected project instead */
+/** Tag spec by default; the showcase passes chips tinted by each project's color instead */
 const TAG = "bg-accent-subtle text-accent";
 
 export function ProjectStack({ stack, tone = TAG }: { stack: string[]; tone?: string }) {
