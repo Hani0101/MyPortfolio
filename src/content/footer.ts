@@ -28,8 +28,8 @@ export const footer = {
     {
       title: "Elsewhere",
       links: [
-        { label: "GitHub", href: "#" },
-        { label: "LinkedIn", href: "#" },
+        { label: "GitHub", href: "https://github.com/Hani0101" },
+        { label: "LinkedIn", href: "https://www.linkedin.com/in/hani-abdel-ghani-612a9623b/" },
         { label: "Résumé (PDF)", href: site.resume.href },
       ],
     },

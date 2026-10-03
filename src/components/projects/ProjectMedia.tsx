@@ -37,7 +37,22 @@ export function ProjectMedia({ media, className = "rounded-control", playing = t
   if (media.kind === "image") {
     return (
       <div className={frame}>
-        <img src={media.src} alt={media.alt} width={media.width} height={media.height} loading="lazy" className="size-full object-cover" />
+        <img src={media.src} alt={media.alt} width={media.width} height={media.height} loading="lazy" className="size-full object-cover object-top" />
+      </div>
+    );
+  }
+
+  if (media.kind === "youtube") {
+    return (
+      <div className={frame}>
+        <iframe
+          src={`https://www.youtube-nocookie.com/embed/${media.id}`}
+          title={media.label}
+          loading="lazy"
+          allow="accelerometer; encrypted-media; picture-in-picture; fullscreen"
+          allowFullScreen
+          className="size-full border-0"
+        />
       </div>
     );
   }

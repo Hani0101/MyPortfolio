@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 import { projects, projectsSection, type Project } from "@/content/projects";
-import { ProjectMedia } from "./ProjectMedia";
+import { ProjectGallery } from "./ProjectGallery";
 import { ProjectLinks, ProjectStack } from "./ProjectParts";
 
 const pad = (n: number) => String(n).padStart(2, "0");
@@ -57,7 +57,7 @@ function ProjectRow({ project, number }: { project: Project; number: string }) {
             <span className="size-2.5 rounded-full bg-border" />
             <span className="ml-3 h-2 w-1/3 rounded-pill bg-background" />
           </div>
-          {project.media ? <ProjectMedia media={project.media} className="" /> : <WindowPlaceholder />}
+          {project.media?.length ? <ProjectGallery items={project.media} /> : <WindowPlaceholder />}
         </div>
       </div>
     </li>
