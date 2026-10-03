@@ -3,6 +3,8 @@
  * button links to its `#contact` anchor.
  */
 
+import { site } from "./site";
+
 export type FooterLink = { label: string; href: string };
 
 // TODO: placeholder email and profile links, replace with your own.
@@ -12,6 +14,8 @@ export const footer = {
   lead: "Have a role, a project or just a question? My inbox is open, and I usually reply within a couple of days.",
   email: "hello@example.com",
   emailCta: "Email me",
+  /** Next to the email button: the other thing a hiring manager looks for */
+  resumeCta: { label: "Download résumé", href: site.resume.href },
   sections: [
     {
       title: "On this page",
@@ -26,7 +30,7 @@ export const footer = {
       links: [
         { label: "GitHub", href: "#" },
         { label: "LinkedIn", href: "#" },
-        { label: "Résumé (PDF)", href: "#" },
+        { label: "Résumé (PDF)", href: site.resume.href },
       ],
     },
   ] satisfies { title: string; links: FooterLink[] }[],
