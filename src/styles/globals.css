@@ -464,6 +464,8 @@
    * the section background. Invisible on plain background, it only hides
    * the visual where text passes over it. It fades in over its top padding,
    * so the visual gets a soft edge instead of looking cut off by a line.
+   * No backdrop blur: at 90% the fill already hides the visual, and a blur on
+   * every step scrolling over the live 3D canvas is costly on phone GPUs.
    */
   @media (max-width: 63.98rem) {
     .story-step-body {
@@ -472,7 +474,6 @@
       padding: var(--fade) 0.75rem 0.75rem;
       border-radius: var(--radius-3);
       background-color: color-mix(in srgb, var(--story-bg) 90%, transparent);
-      backdrop-filter: blur(6px);
       mask-image: linear-gradient(to bottom, transparent, black var(--fade));
     }
   }
