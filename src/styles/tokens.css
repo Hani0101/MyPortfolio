@@ -11,12 +11,15 @@
 
 /* ===================== 1. PRIMITIVE ===================== */
 :root {
-  /* Neutrals (brand palette) */
-  --stone-100: #e4e3e3;
-  --stone-200: #d1d0d0;
-  --taupe-400: #988686;
-  --taupe-600: #6f6262; /* derived: border-strong, 3.79:1 on stone-200 */
-  --taupe-800: #4f4545;
+  /*
+   * Neutrals (brand palette): warm paper and ink, one temperature throughout so
+   * the cool company tints read as color instead of clashing with pink greys
+   */
+  --stone-100: #f8f6f2;
+  --stone-200: #eeebe5;
+  --taupe-400: #a69d93;
+  --taupe-600: #716960; /* derived: border-strong, 4.54:1 on stone-200 */
+  --taupe-800: #4b453f;
   --black: #000000;
   --white: #ffffff;
 
@@ -31,17 +34,17 @@
 
   /*
    * Company accents (hero theming). Darkened so each stays readable on the
-   * tinted hero: >= 4.1:1 as large text with the shape behind it, and muted
-   * text stays >= 4.6:1 over the shape. Re-run the check if you change these.
+   * tinted hero: >= 4.6:1 as large text with the hover glow behind it, and
+   * muted text stays >= 5.2:1 over the glow. Re-run the check if you change these.
    */
   --blue-800: #16478f;
   --teal-800: #0b5555;
   --wine-800: #7e2533;
-  --blue-500: #2953f6; /* inmind.ai brand blue: logo only (logos are exempt from WCAG contrast), 3.45:1 on the tinted hero */
+  --blue-500: #2953f6; /* inmind.ai brand blue: 4.82:1 on the background, 3.4:1 as large text over the hover glow */
   --rust-800: #7f3d14;
 
   /* Shadow tint: taupe-800 as RGB channels */
-  --shadow-tint: 79 69 69;
+  --shadow-tint: 75 69 63;
 
   /* Font stacks; --font-playfair / --font-inter are injected by next/font */
   --family-serif: var(--font-playfair), "Playfair Display", Georgia, "Times New Roman", serif;
@@ -70,18 +73,18 @@
   --surface: var(--stone-100);       /* cards, nav, raised areas */
 
   /* Text */
-  --fg: var(--black);                /* primary text, 13.6:1 on bg */
-  --fg-muted: var(--taupe-800);      /* secondary text, 6.0:1 on bg */
+  --fg: var(--black);                /* primary text, 17.7:1 on bg */
+  --fg-muted: var(--taupe-800);      /* secondary text, 7.9:1 on bg */
 
   /* Accent */
-  --accent: var(--violet-600);       /* links, primary actions, 4.84:1 on bg */
+  --accent: var(--violet-600);       /* links, primary actions, 6.26:1 on bg */
   --accent-hover: var(--violet-700);
   --accent-fg: var(--white);         /* text on accent, 7.45:1 */
   --accent-subtle: var(--violet-100);/* tag chips, selection, highlights */
 
   /* Lines */
   --border: var(--taupe-400);        /* decorative dividers only (2.24:1) */
-  --border-strong: var(--taupe-600); /* input outlines and controls (meets 3:1) */
+  --border-strong: var(--taupe-600); /* input outlines and controls (4.54:1, meets 3:1) */
   --ring: var(--accent);             /* focus indicator */
 
   /* Status */
@@ -139,6 +142,10 @@
   --button-shadow: var(--elevation-1);
   --button-shadow-hover: var(--elevation-2);
 
+  /* Button: small (nav) */
+  --button-sm-px: 1rem;
+  --button-sm-py: 0.5rem;
+
   /* Button: secondary (outline) */
   --button-secondary-bg: transparent;
   --button-secondary-bg-hover: var(--surface);
@@ -171,8 +178,9 @@
   --input-px: 1rem;
   --input-py: 0.75rem;
 
-  /* Nav */
-  --nav-bg: color-mix(in srgb, var(--surface) 80%, transparent); /* frosted header */
+  /* Nav: clear over the top of the hero, frosted once the page scrolls under it */
+  --nav-bg: color-mix(in srgb, var(--surface) 80%, transparent);
+  --nav-border: color-mix(in srgb, var(--border) 60%, transparent);
   --nav-link-fg: var(--fg-muted);
   --nav-link-fg-hover: var(--fg);
   --nav-link-fg-active: var(--accent);
@@ -181,25 +189,25 @@
   /* Footer (also the contact section) */
   --footer-bg: var(--surface);
   --footer-border: var(--border);
-  --footer-link-fg: var(--fg-muted);     /* 7.3:1 on surface */
+  --footer-link-fg: var(--fg-muted);     /* 8.8:1 on surface */
   --footer-link-fg-hover: var(--fg);
 
   /* Hero. --accent-color is written at runtime by useCompanyTheme only. */
   --hero-accent-default: var(--accent);
   /*
-   * Backdrop budget: muted text has little headroom, so the base tint is low
-   * and color lives in the blobs, which sit away from text. Verified by
-   * sampling rendered pixels behind every muted text element.
+   * Backdrop budget: muted text is at 7.9:1 on the plain background and must
+   * stay >= 4.5:1 over every layer, so the tint stays light and the stronger
+   * color lives in the blobs, which sit away from text.
    */
-  --hero-tint: 3%;              /* accent mixed into the hero background */
-  --hero-shape-opacity: 0.12;   /* hover object ceiling */
+  --hero-tint: 5%;              /* accent mixed into the hero background */
+  --hero-shape-opacity: 0.2;    /* hover glow at its center; fades to 0 at its edge */
 
   /* Far layer: soft, slow, low contrast */
   --hero-blob-mix: 14%;         /* blob center; fades to 0 at its edge */
   --hero-grain-opacity: 0.3;    /* static tile, light and dark specks average out */
 
   /* Mid layer: crisp thin lines and dots */
-  --hero-ring-mix: 28%;         /* rings, crosses, dev symbols */
+  --hero-ring-mix: 28%;         /* rings and crosses */
   --hero-ripple-mix: 20%;       /* concentric rings behind the name */
   --hero-dot-alpha: 0.2;        /* dot grid at rest */
   --hero-dot-alpha-max: 0.55;   /* dots right next to the cursor */
@@ -212,29 +220,28 @@
   /*
    * Experience stories. --accent-color is written at runtime by useCompanyTheme
    * only. Accents are never used for small text here (inmind.ai blue is below
-   * 4.5:1), only for lines, dots, chip outlines and the decorative stage.
+   * 4.5:1 on tints), only for lines, dots, chip outlines and the decorative stage.
    */
   --story-accent-default: var(--accent);
   --story-tint: var(--hero-tint);     /* same as the hero, so the boundary has no seam */
   --story-word-mix: 12%;              /* phones: pinned above the active step, but other steps scroll under it */
-  --story-word-mix-wide: 20%;         /* desktop: the stage word has its own column */
+  --story-word-mix-wide: 16%;         /* desktop: a quiet caption above the visual, never louder than the step title */
+  --story-stage-mix: 26%;             /* desktop: the pool of color behind the model, so a light model stands out */
   --story-halo-mix: 22%;              /* ring around the active step dot */
   --story-chip-mix: 8%;               /* chip fill; text stays --fg */
   --story-chip-border-mix: 55%;
   --story-chip-stagger: 90ms;
 
   /*
-   * Projects showcase: the selected project themes the section, like a company
-   * does the hero. Same rule: accents only for the stage, the marker and chip
-   * outlines, never for small text.
+   * Projects: each project is tinted by its own --project-* color (stage, chip
+   * outlines and its links), so those tokens must stay >= 4.5:1 on the background.
    */
   --showcase-tint: var(--hero-tint);  /* section background, same strength as the hero and stories */
   --showcase-stage-mix: 14%;          /* the stage behind the browser window */
   --showcase-sketch-mix: 30%;         /* placeholder page sketch, so the theme shows before the media exists */
-  --showcase-tab-hover-mix: 6%;       /* tab row on hover (pointer devices only) */
 
   /* 3D stage (read by Three.js through hidden color probes). Cargo turns --accent-color when highlighted. */
-  --story-model-body: var(--stone-100);  /* truck, browser card */
+  --story-model-body: var(--white);      /* truck, browser card: lighter than everything around it */
   --story-model-cargo: var(--taupe-400); /* boxes at rest */
   --story-model-line: var(--taupe-400);  /* browser card: placeholder blocks and lines */
   --story-model-ink: var(--taupe-800);   /* browser card: labels, outlines and icons */
