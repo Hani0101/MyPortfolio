@@ -78,7 +78,6 @@ export function Hero() {
         inView={inView}
       />
       <HoverObject
-        companies={companies}
         activeId={activeId}
         enabled={hoverEffects}
         inView={inView}
@@ -86,8 +85,9 @@ export function Hero() {
         targetRef={targetRef}
       />
 
-      <div className="relative z-10 mx-auto grid max-w-content gap-16 px-gutter pb-section pt-[calc(var(--nav-height)+3rem)] lg:grid-cols-12 lg:gap-8">
-        <div className="relative self-start lg:sticky lg:top-[calc(var(--nav-height)+3rem)] lg:col-span-5">
+      {/* Desktop: fits one screen, both columns centered on it, so nothing is cut at the fold */}
+      <div className="relative z-10 mx-auto grid min-h-svh max-w-content content-center gap-16 px-gutter pb-12 pt-[calc(var(--nav-height)+2rem)] lg:grid-cols-12 lg:items-center lg:gap-8">
+        <div className="relative lg:col-span-5">
           <p className="text-sm font-medium uppercase tracking-[0.2em] text-muted">{hero.eyebrow}</p>
           <div className="relative mt-4 w-fit">
             <NameRipples activeId={activeId} animate={animate} />

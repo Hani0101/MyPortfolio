@@ -1,9 +1,14 @@
 import type { CSSProperties } from "react";
 import type { Company } from "@/content/companies";
 
-/** Company name with its logo: a mark before the name, or a wordmark in place of it. */
-export function CompanyName({ company }: { company: Company }) {
+/**
+ * Company name with its logo: a mark before the name, or a wordmark in place of it.
+ * `plain` shows the name alone, for lists where every company should look alike.
+ */
+export function CompanyName({ company, plain = false }: { company: Company; plain?: boolean }) {
   const { logo, name } = company;
+
+  if (plain) return <>{name}</>;
 
   if (logo?.kind === "wordmark") {
     // Painted with currentColor through the logo's shape, so it tracks the

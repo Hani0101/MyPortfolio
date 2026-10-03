@@ -2,13 +2,13 @@
 
 import { useCallback, useLayoutEffect, useState, type RefObject } from "react";
 
-/** Anything with a theme color: companies, projects */
+/** Anything with a theme color */
 type Themed = { id: string; accent?: string };
 
 /**
- * The only place that writes a theme. The hero (hover), the experience section
- * (scroll) and the projects showcase (selection) each call it on their own root;
- * components call activate/release/reset and never touch --accent-color themselves.
+ * The only place that writes a theme. The hero (hover) and the experience
+ * section (scroll) each call it on their own root; components call
+ * activate/release/reset and never touch --accent-color themselves.
  */
 export function useCompanyTheme(rootRef: RefObject<HTMLElement | null>, companies: readonly Themed[]) {
   const [activeId, setActiveId] = useState<string | null>(null);

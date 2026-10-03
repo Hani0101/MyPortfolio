@@ -3,8 +3,6 @@ export type Company = {
   name: string;
   /** Where the list item links to; anchors in the future Experience section. */
   href: string;
-  /** Big word knocked out of the hover object. Keep it short (<= 10 chars). */
-  keyword: string;
   /** Theme color, always a token from tokens.css. */
   accent: string;
   /**
@@ -19,13 +17,12 @@ export type Company = {
   period?: string;
 };
 
-// TODO: fill in role/period and swap keywords for what you did there.
+// TODO: fill in role/period.
 export const companies: Company[] = [
   {
     id: "bmw",
     name: "BMW",
     href: "#experience-bmw",
-    keyword: "Logistics",
     accent: "var(--company-bmw)",
     logo: { src: "/logos/BMW_logo_(gray).svg", width: 1, height: 1, kind: "mark" },
     role: "Software Engineering Intern",
@@ -35,7 +32,6 @@ export const companies: Company[] = [
     id: "cybermeshwork",
     name: "Cybermeshwork",
     href: "#experience-cybermeshwork",
-    keyword: "CMW",
     accent: "var(--company-cybermeshwork)",
     role: "Software Engineer",
     period: "Jul 2026 – Present",
@@ -44,33 +40,26 @@ export const companies: Company[] = [
     id: "ids",
     name: "IDS",
     href: "#experience-ids",
-    keyword: "IDS",
     accent: "var(--company-ids)",
     logo: { src: "/logos/ids-white.svg", width: 89.27, height: 29.38, kind: "wordmark" },
-    // TODO: placeholder, replace
-    role: "Role title",
-    period: "Start – End",
+    role: "Software Engineering Intern",
+    period: "Dec 2024 – Jan 2025",
   },
   {
     id: "inmind",
     name: "inmind.ai",
     href: "#experience-inmind",
-    keyword: "inmind",
     accent: "var(--company-inmind)",
-    // Lowercase wordmark reads small next to the caps logos
     logo: { src: "/logos/inmind-logo.svg", width: 626.67, height: 160.26, kind: "wordmark", scale: 1.25 },
-    // TODO: placeholder, replace
-    role: "Role title",
-    period: "Start – End",
+    role: "Software Engineering Intern",
+    period: "Feb 2025 – Mar 2025",
   },
   {
     id: "geek-express",
     name: "Geek Express",
     href: "#experience-geek-express",
-    keyword: "Geek",
     accent: "var(--company-geek-express)",
-    // TODO: placeholder, replace
-    role: "Role title",
-    period: "Start – End",
+    role: "Coding Tutor",
+    period: "Nov 2022 – Sep 2025",
   },
 ];
