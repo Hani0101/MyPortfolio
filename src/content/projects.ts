@@ -43,7 +43,7 @@ export const projects: Project[] = [
       { label: "Source code", href: "https://github.com/Hani0101/ecommerce-inmind/tree/development" },
     ],
     media: [
-      { kind: "video", src: "/project_videos/Ecommerce.mp4", label: "Walkthrough of the e-commerce site" },
+      { kind: "youtube", id: "fBZ_lN9mST4", label: "Walkthrough of the e-commerce site" },
       { kind: "image", src: "/project_images/ecom_mockup.png", alt: "Final mockup of the e-commerce site", width: 2880, height: 6164 },
       { kind: "image", src: "/project_images/ecom-wireframe.png", alt: "Wireframe of the e-commerce site", width: 4096, height: 5238 },
     ],
@@ -70,7 +70,7 @@ export const projects: Project[] = [
     links: [
       { label: "Source code", href: "https://github.com/Hani0101/Logistics-Truck-Loading" },
     ],
-    media: [{ kind: "video", src: "/project_videos/truck_loading.mp4", label: "Truck loading demo" }],
+    media: [{ kind: "youtube", id: "Kbta34AQeVc", label: "Truck loading demo" }],
     accent: "var(--project-three)",
   },
 ];
