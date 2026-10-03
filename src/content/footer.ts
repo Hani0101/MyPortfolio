@@ -7,12 +7,11 @@ import { site } from "./site";
 
 export type FooterLink = { label: string; href: string };
 
-// TODO: placeholder email and profile links, replace with your own.
 export const footer = {
   eyebrow: "Contact",
   title: "Let's build something together.",
-  lead: "Have a role, a project or just a question? My inbox is open, and I usually reply within a couple of days.",
-  email: "hello@example.com",
+  lead: "Have a role, a project or just a question? My inbox is open.",
+  email: "hani.abdel.ghani12@gmail.com",
   emailCta: "Email me",
   /** Next to the email button: the other thing a hiring manager looks for */
   resumeCta: { label: "Download résumé", href: site.resume.href },

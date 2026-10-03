@@ -196,7 +196,7 @@ export const experiences: Experience[] = [
         scene: { visual: "card", show: ["t_suite", "t_bug", "t_ticket", "t_speed"] },
         label: "What I did",
         title: "Owning quality",
-        body: "I own the speed and reliability of the tests and their infrastructure, report bugs, and draft new features in Jira for the backend team.",
+        body: "I own the speed and reliability of the tests and their infrastructure, report bugs, and draft new features in Jira for the development team.",
       },
       {
         kind: "text",
